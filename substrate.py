@@ -123,16 +123,18 @@ class usbtmc(object):
 
     def readline(self):
         return self._raw_read()
+
 class socket_comm(object):
     def __init__(self, host, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect.((host, port))
+        self.sock.connect((host, port))
 
     def write(self, string):
-        self.sendall(string)
+        print(string, flush=True)
+        self.sock.sendall(string.encode())
 
     def readline(self):
-        return = self.sock.recv(1024)
+        return self.sock.recv(1024)
 
     def read(self, string):
         self.write(string)
