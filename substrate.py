@@ -127,6 +127,7 @@ class usbtmc(object):
 class socket_comm(object):
     def __init__(self, host, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.settimeout(5)
         self.sock.connect((host, port))
 
     def write(self, string):
