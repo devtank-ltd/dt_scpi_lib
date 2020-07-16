@@ -127,7 +127,7 @@ class scpi_sig_gen(sig_gen_t):
     @power_level.setter
     def power_level(self, level):
         self.mpower_level = level
-        self.gpib.write("pow %d;\n" % level)
+        self.gpib.write("pow %f;\n" % level)
 
 class hp8648(sig_gen_t):
     def __init__(self, tty):
