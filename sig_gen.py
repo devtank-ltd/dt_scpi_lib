@@ -92,6 +92,39 @@ class hmct2220(sig_gen_t):
         self.mpower_level = level
         self.gpib.write(self.gpib_pow())
 
+class fake_sig_gen(sig_gen_t):
+    def __init__(self):
+        self.mfreq = 0
+        self.mrf_power = False
+        self.mpower_level = 0
+
+    def idn(self):
+        return "Devtank Fake Signal Generator"
+
+    @property
+    def rf_power(self):
+        return self.mrf_power
+   
+    @rf_power.setter
+    def rf_power(self, enable):
+        self.mrf_power = enable
+
+    @property
+    def freq(self):
+        return self.mfreq
+    
+    @freq.setter
+    def freq(self, freq):
+        self.mfreq = freq
+    
+    @property
+    def power_level(self):
+        return self.mpower_level
+
+    @power_level.setter
+    def power_level(self, level):
+        self.mpower_level = level
+
 class scpi_sig_gen(sig_gen_t):
     def __init__(self, tty):
         self.gpib = tty
