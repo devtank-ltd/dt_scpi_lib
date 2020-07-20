@@ -15,7 +15,6 @@ class oscilloscope_t(object):
         return self.gpib.read("*idn?;")
 
 class rigol_ds1000z_t(oscilloscope_t):
-
     d0 = "D0"
     d1 = "D1"
     d2 = "D2"
