@@ -15,6 +15,28 @@ def set_debug_print(_func):
 def get_debug_print():
     return debug_print
 
+class fakelog(object):
+    def __init__(self):
+        pass
+
+    def command(self, string):
+        pass
+
+    def response(self, string):
+        pass
+
+class log(object):
+    def __init__(self, fn):
+        self.fn = fn
+
+    def command(self, string):
+        with open(self.fn, 'a') as f:
+            f.write(">>> " + string + '\n')
+
+    def response(self, string):
+        with open(self.fn, 'a') as f:
+            f.write("<<< " + string + '\n')
+
 class prologix_substrate(object):
 
     def prologix_print(self, string):
@@ -125,17 +147,22 @@ class usbtmc(object):
         return self._raw_read()
 
 class socket_comm(object):
-    def __init__(self, host, port):
+    def __init__(self, host, port, log=None):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.settimeout(5)
         self.sock.connect((host, port))
+        self.log = log
+        if not self.log:
+            self.log = fakelog()
 
     def write(self, string):
-        print(string, flush=True)
+        self.log.command(string)
         self.sock.sendall(string.encode())
 
     def readline(self):
-        return self.sock.recv(1024)
+        string = self.sock.recv(1024)
+        self.log.response(string)
+        return string
 
     def read(self, string):
         self.write(string)
