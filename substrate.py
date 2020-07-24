@@ -129,7 +129,7 @@ class usbtmc(object):
 
     def _raw_write(self, cmd):
         debug_print("usbtmc << :" + cmd)
-        self._dev.write(cmd.encode() + self._eol.encode())
+        self._dev.write(cmd + self._eol)
 
     def _raw_read(self):
         r = self._dev.readline().rstrip().decode()
