@@ -33,7 +33,7 @@ class rigol_ds1000z_t(oscilloscope_t):
         self.gpib = f
 
     def is_channel(self, name):
-        return name in [d0, d1, d2, d3, channel1, channel2, channel3, channel3, ac]
+        return name in [self.d0, self.d1, self.d2, self.d3, self.channel1, self.channel2, self.channel3, self.channel3, self.ac]
 
     def trigger_single(self):
         self.gpib.write(":SINGle")
