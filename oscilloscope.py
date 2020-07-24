@@ -33,18 +33,21 @@ class tektronix_tds(oscilloscope_t):
     def is_channel(self, name):
         return name in [self.channel1, self.channel2, self.channel3, self.channel3, self.ext, self.ext5, self.ext10]
 
+    def trigger_q(self):
+        self.gpib.read("TRIGger?")
+
     def trigger_single(self):
         self.gpib.write(":SINGle")
 
     def trigger_force(self):
-        self.gpib.write(":TRIGger:MAIn")
+        self.gpib.write("TRIGger FORCe")
 
     def trigger_edge(self, source, edge_type):
         # This is not working, but I'm not going to try and find out why yet.
         assert(self.is_channel(source))
-        self.gpib.write(":TRIGger:MODe EDGE")
-        self.gpib.write(":TRIGger:EDGe:SOURce %s" % source)
-        self.gpib.write(":TRIGger:EDGe:SLOPe %s" % edge_type)
+        self.gpib.write("TRIGger:MAIn:MODe NORMal")
+        self.gpib.write("TRIGger:MAIn:EDGE:SOURce %s" % source)
+        self.gpib.write("TRIGger:MAIn:EDGE:SLOPe %s" % edge_type)
 
 
 class rigol_ds1000z_t(oscilloscope_t):
