@@ -3,6 +3,7 @@ import os
 import serial
 import time
 import socket
+from stat import *
 
 def debug_print(msg):
     if "DEBUG" in os.environ:
@@ -28,13 +29,17 @@ class fakelog(object):
 class log(object):
     def __init__(self, fn):
         self.fn = fn
+        if S_ISSOCK(os.stat(fn).st_mode):
+            self.mode = 'a'
+        else:
+            self.mode = 'w'
 
     def command(self, string):
-        with open(self.fn, 'a') as f:
+        with open(self.fn, self.mode) as f:
             f.write(">>> " + string + '\n')
 
     def response(self, string):
-        with open(self.fn, 'a') as f:
+        with open(self.fn, self.mode) as f:
             f.write("<<< " + string + '\n')
 
 class prologix_substrate(object):
@@ -123,17 +128,20 @@ class usbtty(object):
         return self.readline()
 
 class usbtmc(object):
-    def __init__(self, devpath):
+    def __init__(self, devpath, log=None):
         self._dev = open(devpath, "r+")
         self._eol = "\n"
+        self.log = log
+        if not self.log:
+            self.log = fakelog()
 
     def _raw_write(self, cmd):
-        debug_print("usbtmc << :" + cmd)
+        self.log.command(cmd)
         self._dev.write(cmd + self._eol)
 
     def _raw_read(self):
         r = self._dev.readline().rstrip().decode()
-        debug_print("usbtmc >> :" + r)
+        self.log.response(r)
         return r
 
     def write(self, cmd):
