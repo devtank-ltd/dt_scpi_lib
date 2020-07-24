@@ -124,7 +124,7 @@ class usbtty(object):
 
 class usbtmc(object):
     def __init__(self, devpath):
-        self._dev = open(devpath, "r+b")
+        self._dev = open(devpath, "r+")
         self._eol = "\n"
 
     def _raw_write(self, cmd):
