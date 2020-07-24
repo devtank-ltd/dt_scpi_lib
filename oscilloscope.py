@@ -42,7 +42,7 @@ class rigol_ds1000z_t(oscilloscope_t):
         self.gpib.write(":TFORce")
 
     def trigger_edge(self, source, edge_type): 
-        assert(is_channel(source))
+        assert(self.is_channel(source))
         self.gpib.write(":TRIGger:MODe EDGE")
         self.gpib.write(":TRIGger:EDGe:SOURce %s" % source)
         self.gpib.write(":TRIGger:EDGe:SLOPe %s" % edge_type)
