@@ -20,6 +20,10 @@ class power_supply_t(object):
     def current_limit(self, i):
         raise NotImplementedError
 
+    @property
+    def current(self):
+        raise NotImplementedError
+
 class thurlby_pl330(power_supply_t):
     def __init__(self, chan, tty):
         self.gpib = tty
@@ -69,3 +73,7 @@ class n6700(power_supply_t):
     def current_limit(self, i):
         self.mcurrent_limit = i
         self.gpib.write("CURRent:LIMit %f,(@%u)" % (i, self.chan))
+
+    @property
+    def current(self):
+        return float(self.gpib.read("MEASure:CURRent?,(@%u)" % self.chan))
