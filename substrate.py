@@ -5,17 +5,6 @@ import time
 import socket
 from stat import *
 
-def debug_print(msg):
-    if "DEBUG" in os.environ:
-        print(msg)
-
-def set_debug_print(_func):
-    global debug_print
-    debug_print = _func
-
-def get_debug_print():
-    return debug_print
-
 class fakelog(object):
     def __init__(self):
         pass
@@ -43,22 +32,20 @@ class log(object):
             f.write("<<< " + string + '\n')
 
 class prologix_substrate(object):
-
     def prologix_print(self, string):
-        debug_print(string.strip())
         self.file.write(string.encode())
 
     def gpib_print(self, string):
-        debug_print(string.strip())
+        self.log.command(string)
         self.file.write(string.encode())
 
-    def gpib_response(self, string):
-        debug_print("Response from GPIB device: " + string.strip())
-
-    def __init__(self, f):
+    def __init__(self, f, log=None):
         self.file = f
         self.prologix_print("++mode 1\n++ifc\n++read_tmo_ms 500\n")
         self.addr = None
+        self.log = log
+        if not self.log:
+            self.log = fakelog()
 
     @property
     def address(self):
@@ -79,16 +66,20 @@ class prologix_substrate(object):
     def readline(self):
         self.prologix_print("++read 10\n")
         a = self.file.readline().rstrip().decode()
-        self.gpib_response(a)
+        self.log.response(a)
         return a
 
 class gpib_device(object):
-    def __init__(self, substrate, address):
+    def __init__(self, substrate, address, log=None):
         self.serial = substrate
         self.address = address
+        self.log = log
+        if not self.log:
+            self.log = fakelog()
 
     def write(self, string):
         self.serial.address = self.address
+        self.log.command(cmd)
         self.serial.write(string)
 
     def readline(self):
@@ -114,10 +105,14 @@ class dummy_substrate(object):
 
 class usbtty(object):
     # A class that tries to behave exactly as does gpib_device above
-    def __init__(self, f):
+    def __init__(self, f, log=None):
         self.serial = serial.Serial(f)
+        self.log = log
+        if not self.log:
+            self.log = fakelog()
 
     def write(self, string):
+        self.log.command(cmd)
         self.serial.write(string + "\n")
 
     def readline(self):
