@@ -164,7 +164,7 @@ class socket_comm(object):
 
     def readline(self):
         string = self.sock.recv(1024)
-        self.log.response(string)
+        self.log.response(string.decode())
         return string
 
     def read(self, string):
