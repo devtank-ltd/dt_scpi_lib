@@ -15,13 +15,23 @@ class fakelog(object):
     def response(self, string):
         pass
 
+class stderr_log(object):
+    def __init__(self, name):
+        self.name = name
+
+    def command(self, string):
+        print("sent to %s: %s" % (self.name, string), file=sys.stderr, flush=True)
+
+    def response(self, string):
+        print("received from %s: %s" % (self.name, string), file=sys.stderr, flush=True)
+
 class log(object):
     def __init__(self, fn):
         self.fn = fn
         if S_ISSOCK(os.stat(fn).st_mode):
             self.mode = 'a'
         else:
-            self.mode = 'w'
+            self.mode = 'a'
 
     def command(self, string):
         with open(self.fn, self.mode) as f:
