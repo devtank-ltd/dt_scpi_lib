@@ -162,6 +162,9 @@ class scpi_sig_gen(sig_gen_t):
         self.mpower_level = level
         self.gpib.write("pow %f;\n" % level)
 
+    def opc(self):
+        return self.gpib.read("*opc?\n")
+
 class hp8648(sig_gen_t):
     def __init__(self, tty):
         self.gpib = gpib_device(tty, 5)
