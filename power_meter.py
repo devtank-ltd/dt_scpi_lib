@@ -75,7 +75,7 @@ class u2020_t(power_meter_t):
         # Fetches the reading.
         return self.gpib.read("FETC?")
 
-    def measure():
+    def measure(self):
         # Presets the U2020 X-Series to default values.
         self.gpib.write("SYST:PRES") 
 
