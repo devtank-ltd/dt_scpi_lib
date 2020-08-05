@@ -28,6 +28,7 @@ class stderr_log(object):
 class log(object):
     def __init__(self, fn):
         self.fn = fn
+        open(fn, 'a').close() # Create the file if it doesn't exist
         if S_ISSOCK(os.stat(fn).st_mode):
             self.mode = 'a'
         else:
