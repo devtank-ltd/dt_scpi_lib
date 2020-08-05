@@ -28,7 +28,10 @@ class u2020_t(power_meter_t):
     def __init__(self, gpib):
         self.gpib = gpib
 
-    def pulsed(freq, delay, time):
+    def opc(self):
+        return self.gpib.read("*opc?")
+
+    def pulsed(self, freq, delay, time):
         # freq is the frequency in Hz
         # delay is how much time after the trigger event to start measuring in seconds
         # time is the duration of the time-gated period
