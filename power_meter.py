@@ -47,8 +47,8 @@ class u2020_t(power_meter_t):
         # Sets the measurement speed to fast mode.
         self.gpib.write("SENS:MRAT FAST")
 
-        # Sets the buffer size of the U2020 X-Series to 100 to store 100 measurement readings.
-        self.gpib.write("TRIG:COUN 100")
+        # Sets the buffer size of the U2020 X-Series to 100 to store 1 measurement readings.
+        self.gpib.write("TRIG:COUN 1")
 
         # Disables auto-zeroing.
         self.gpib.write("CAL:ZERO:AUTO OFF")
@@ -65,8 +65,9 @@ class u2020_t(power_meter_t):
         # Sets the power measurement unit for CALC1 to W.
         self.gpib.write("UNIT:POW W") # TODO: do we want watts or dB?
 
-        # Sets the data format to REAL.
-        self.gpib.write("FORM REAL")
+        # Sets the data format to ASC; this means the result is human-readable and convertible by standard library functions.
+        # (It also is possible to do "FORM REAL" - This makes the meter to output an IEEE-754 floating point number)
+        self.gpib.write("FORM ASC")
 
         # Fetches the reading.
         return self.gpib.read("FETC?")
