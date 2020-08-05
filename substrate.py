@@ -146,7 +146,7 @@ class usbtmc(object):
         self._dev.write(cmd + self._eol)
 
     def _raw_read(self):
-        r = self._dev.readline().rstrip().decode()
+        r = self._dev.readline().rstrip()
         self.log.response(r)
         return r
 
