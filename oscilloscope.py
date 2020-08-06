@@ -83,4 +83,5 @@ class rigol_ds1000z_t(oscilloscope_t):
         self.gpib.write(":TRIGger:EDGe:SOURce %s" % source)
         self.gpib.write(":TRIGger:EDGe:SLOPe %s" % edge_type)
 
-
+    def amplitude(self):
+        return self.gpib.read(":MEASure:VAMPlitude?")
