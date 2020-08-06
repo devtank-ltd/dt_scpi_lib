@@ -60,10 +60,10 @@ class u2020_t(power_meter_t):
         self.gpib.write("CAL:AUTO OFF")
 
         # Set the delay between the triggered point and the start of the time-gated period.
-        self.gpib.write("SENS:SWE:OFFS:TIME %u" % delay)
+        self.gpib.write("SENS:SWE:OFFS:TIME %f" % delay)
 
         # Set the duration of the time-gated period
-        self.gpib.write("SENS:SWE:TIME %u" % time)
+        self.gpib.write("SENS:SWE:TIME %f" % time)
 
         # Sets the power measurement unit for CALC1 to W.
         self.gpib.write("UNIT:POW W") # TODO: do we want watts or dB?
