@@ -20,10 +20,10 @@ class stderr_log(object):
         self.name = name
 
     def command(self, string):
-        print("sent to %s: %s" % (self.name, string), file=sys.stderr, flush=True)
+        print("sent to %s: \"%s\"" % (self.name, string), file=sys.stderr, flush=True)
 
     def response(self, string):
-        print("received from %s: %s" % (self.name, string), file=sys.stderr, flush=True)
+        print("received from %s: \"%s\"" % (self.name, string), file=sys.stderr, flush=True)
 
 class log(object):
     def __init__(self, fn):
@@ -135,7 +135,10 @@ class usbtty(object):
 
 class usbtmc(object):
     def __init__(self, devpath, log=None):
-        self._dev = open(devpath, "r+")
+        # The file needs to be opened as a binary file, and the strings need to be decoded and encoded.
+        # Otherwise the slave device will claim that the query has been interrupted, will will cause the _raw_read method to time out.
+        # I am not sure why this is.
+        self._dev = open(devpath, "r+b")
         self._eol = "\n"
         self.log = log
         if not self.log:
@@ -143,11 +146,11 @@ class usbtmc(object):
 
     def _raw_write(self, cmd):
         self.log.command(cmd)
-        self._dev.write(cmd + self._eol)
+        self._dev.write(cmd.encode() + self._eol.encode())
 
     def _raw_read(self):
-        r = self._dev.readline().rstrip()
-        self.log.response(r)
+        r = self._dev.readline().rstrip().decode()
+        self.log.response(r.encode())
         return r
 
     def write(self, cmd):
