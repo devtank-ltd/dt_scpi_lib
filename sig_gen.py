@@ -28,6 +28,17 @@ class sig_gen_t(object):
     def power_level(self, level):
         raise NotImplementedError
 
+    #I can't figure out how to inherit this from ieee488_t
+    @property
+    def idn(self):
+        return self.gpib.read("*idn?")
+
+    @idn.setter
+    def idn(self, enable):
+        raise NotImplementedError
+
+
+
 class hmct2220(sig_gen_t):
     def __init__(self, tty):
         self.gpib = tty
