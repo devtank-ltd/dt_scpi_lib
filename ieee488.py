@@ -31,9 +31,9 @@ class ieee488_t(object):
 class scpi_t(ieee488_t):
 
     def system_error(self):
-        return self.gpib.read(":SYSTem:ERRor")
+        return self.gpib.read("SYSTem:ERRor")
 
     def system_version(self):
-        return self.gpib.read(":SYSTem:VERSion")
+        return self.gpib.read("SYSTem:VERSion")
 
 
