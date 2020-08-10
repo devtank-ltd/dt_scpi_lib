@@ -25,7 +25,7 @@ class power_supply_t(object):
     def current(self):
         raise NotImplementedError
 
-class thurlby_pl330(power_supply_t):
+class thurlby_pl330(ieee488_t):
     def __init__(self, chan, gpib):
         self.gpib = gpib
         self.chan = chan
@@ -50,7 +50,7 @@ class thurlby_pl330(power_supply_t):
         self.mcurrent_limit = i
         self.gpib.write("I%u %f\n" % (self.chan, i))
 
-class n6700(power_supply_t):
+class n6700(scpi_t):
     def __init__(self, chan, gpib):
         self.gpib = gpib
         self.chan = chan
