@@ -2,7 +2,7 @@ from collections import namedtuple
 import sys
 import os
 import time
-from dt_scpi_lib.ieee488 import ieee488_t
+from dt_scpi_lib.ieee488 import ieee488_t, scpi_t
 
 class sig_gen_t(ieee488_t):
     @property
@@ -127,7 +127,7 @@ class fake_sig_gen(sig_gen_t):
     def power_level(self, level):
         self.mpower_level = level
 
-class scpi_sig_gen(sig_gen_t):
+class scpi_sig_gen(scpi_t):
     def __init__(self, tty):
         self.gpib = tty
         self.mfreq = 0
