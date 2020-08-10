@@ -2,8 +2,9 @@ from collections import namedtuple
 import sys
 import os
 import time
+from dt_scpi_lib.ieee488 import ieee488_t
 
-class sig_gen_t(object):
+class sig_gen_t(ieee488_t):
     @property
     def rf_power(self):
         raise NotImplementedError
@@ -27,16 +28,6 @@ class sig_gen_t(object):
     @power_level.setter
     def power_level(self, level):
         raise NotImplementedError
-
-    #I can't figure out how to inherit this from ieee488_t
-    @property
-    def idn(self):
-        return self.gpib.read("*idn?")
-
-    @idn.setter
-    def idn(self, enable):
-        raise NotImplementedError
-
 
 
 class hmct2220(sig_gen_t):
@@ -142,9 +133,6 @@ class scpi_sig_gen(sig_gen_t):
         self.mfreq = 0
         self.mrf_power = False
         self.mpower_level = 0
-
-    def idn(self):
-        return self.gpib.read("*idn?;i\n")
 
     @property
     def rf_power(self):

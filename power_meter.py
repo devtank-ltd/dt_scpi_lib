@@ -1,9 +1,10 @@
 from collections import namedtuple
+from dt_scpi_lib.ieee488 import ieee488_t
 import sys
 import os
 import time
 
-class power_meter_t(object):
+class power_meter_t(ieee488_t):
     @property
     def voltage(self):
         raise NotImplementedError
@@ -27,9 +28,6 @@ class power_meter_t(object):
 class u2020_t(power_meter_t):
     def __init__(self, gpib):
         self.gpib = gpib
-
-    def opc(self):
-        return self.gpib.read("*opc?")
 
     def pulsed(self, freq, delay, time):
         # freq is the frequency in Hz
@@ -75,12 +73,12 @@ class u2020_t(power_meter_t):
         # Fetches the reading.
         return self.gpib.read("FETC?")
 
-    def measure(self):
+    def measure(self, frequency):
         # Presets the U2020 X-Series to default values.
         self.gpib.write("SYST:PRES") 
 
         # Sets the frequency to 50 MHz.
-        self.gpib.write("SENS:FREQ 50MHz") 
+        self.gpib.write("SENS:FREQ %d" % frequency) 
 
         # Initiates the trigger sequence.
         self.gpib.write("INIT:CONT ON") 
