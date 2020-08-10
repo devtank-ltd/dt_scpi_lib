@@ -2,6 +2,7 @@ from collections import namedtuple
 import sys
 import os
 import time
+from dt_scpi_lib.ieee488 import ieee488_t, scpi_t
 
 class power_supply_t(object):
     @property
@@ -24,9 +25,18 @@ class power_supply_t(object):
     def current(self):
         raise NotImplementedError
 
+class scpi_power_supply(scpi_t):
+    def __init__(self, gpib):
+        self.gpib = gpib
+
+class gpib_power_supply(ieee488_t):
+    def __init__(self, gpib):
+        self.gpib = gpib
+
+
 class thurlby_pl330(power_supply_t):
     def __init__(self, chan, tty):
-        self.gpib = tty
+        super.__init__(tty)
         self.chan = chan
         self.mcurrent_limit = 0
         self.mvoltage = 0
@@ -51,6 +61,7 @@ class thurlby_pl330(power_supply_t):
 
 class n6700(power_supply_t):
     def __init__(self, chan, gpib):
+        super.__init__(gpib)
         self.gpib = gpib
         self.chan = chan
         self.mcurrent_limit = 0;
