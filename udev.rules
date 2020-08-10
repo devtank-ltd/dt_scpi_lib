@@ -11,7 +11,6 @@ KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc
 KERNEL=="usb*", ATTRS{idVendor}=="2a8d", ATTRS{idProduct}=="1102", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply%c"
 
 # KEYSIGHT U2022
-# I believe this device's *idn? query lies about what it is.
 KERNEL=="usb*", ATTRS{idVendor}=="2a8d", ATTRS{idProduct}=="7f18", GROUP="usbtmc", MODE="0660", SYMLINK+="power_meter%c"
 
 KERNEL=="usbtmc[0..9]", SUBSYSTEM=="usbmisc", MODE="0666"
