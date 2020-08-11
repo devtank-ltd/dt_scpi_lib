@@ -4,7 +4,6 @@ KERNEL=="usb*", ATTRS{idVendor}=="0699", ATTRS{idProduct}=="0366", GROUP="usbtmc
 # RIGOL DS1000 series
 # I think this rule is wrong
 KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="0396", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c"
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="00ca", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c"
 
 # ROHDE & SCHWARZ SMBV100A
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%c"
@@ -20,6 +19,9 @@ KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="1102", GROUP="u
 
 # KEYSIGHT U2022
 KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="7f18", GROUP="usbtmc", MODE="0660", SYMLINK+="power_meter%c"
+
+# Unknown devices seen at Customer
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="00ca", GROUP="usbtmc", MODE="0660", SYMLINK+="unknown%c"
 
 KERNEL=="usbtmc[0..9]", SUBSYSTEM=="usbmisc", MODE="0666"
 
