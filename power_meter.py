@@ -29,6 +29,11 @@ class u2020_t(scpi_t):
     def __init__(self, gpib):
         self.gpib = gpib
 
+    def system_error(self):
+        # Overridden because this power meter works subtly differently from the SCPI standard
+        # and so does not support the :NEXT query of the SYSTem:ERRor subsystem
+        return self.gpib.read("SYSTem:ERRor?")
+
     def pulsed(self, freq, delay, time):
         # freq is the frequency in Hz
         # delay is how much time after the trigger event to start measuring in seconds
