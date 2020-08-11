@@ -1,5 +1,5 @@
 from collections import namedtuple
-from dt_scpi_lib.ieee488 import ieee488_t
+from dt_scpi_lib.ieee488 import ieee488_t, scpi_t
 import sys
 import os
 import time
@@ -25,7 +25,7 @@ class power_meter_t(ieee488_t):
     def current(self):
         raise NotImplementedError
 
-class u2020_t(power_meter_t):
+class u2020_t(scpi_t):
     def __init__(self, gpib):
         self.gpib = gpib
 
