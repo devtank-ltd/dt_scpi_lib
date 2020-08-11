@@ -5,10 +5,12 @@ KERNEL=="usb*", ATTRS{idVendor}=="0699", ATTRS{idProduct}=="0366", GROUP="usbtmc
 # I think this rule is wrong
 KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="0396", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c"
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="00ca", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c"
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c"
 
-# ROHDE & SCHWARZ SMBV200A
+# ROHDE & SCHWARZ SMBV100A
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%c"
+
+# ROHDE & SCHWARZ SMW200A
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%c"
 
 # ROHDE & SCHWARZ SMBV100A
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0023", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%c"
