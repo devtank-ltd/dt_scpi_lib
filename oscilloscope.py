@@ -51,6 +51,8 @@ class tektronix_tds(oscilloscope_t):
 
 
 class rigol_ds1000z_t(oscilloscope_t):
+    # It's true; this oscilloscope has some SCPI-like language, but actually is not SCPI.
+    # And it also does not accept most IEEE-488.2 commands either
     d0 = "D0"
     d1 = "D1"
     d2 = "D2"
@@ -67,6 +69,11 @@ class rigol_ds1000z_t(oscilloscope_t):
 
     def __init__(self, f):
         self.gpib = f
+    
+    def idn(self):
+        # This command is specified by IEEE-488.2, but the device doesn't support all of IEEE-488.2
+        # so we can't inherit from that class; we just need to reimplement this one command
+        return self.gpib.write("*IDN?")
 
     def is_channel(self, name):
         return name in [self.d0, self.d1, self.d2, self.d3, self.channel1, self.channel2, self.channel3, self.channel3, self.ac]
