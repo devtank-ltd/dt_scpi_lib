@@ -1,33 +1,33 @@
 # TEKTRONIX TDS1012B
-KERNEL=="usb*", ATTRS{idVendor}=="0699", ATTRS{idProduct}=="0366", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c"
+KERNEL=="usb*", ATTRS{idVendor}=="0699", ATTRS{idProduct}=="0366", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%n"
 
 # KEYSIGHT DSOX1204G
-KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="0396", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c"
+KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="0396", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%n"
 
 # RIGOL DS1000 series
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0396", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c" # the idProduct here is incorrect
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0396", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%n" # the idProduct here is incorrect
 
 # ROHDE & SCHWARZ SMBV100A
 # One of the following two rules is wrong 
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%c"
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%n"
 
 # ROHDE & SCHWARZ SMBV100A
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0023", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%c"
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0023", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%n"
 
 # ROHDE & SCHWARZ UNKNOWN DEVICE
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc", MODE="0660", SYMLINK+="unknown%c"
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc", MODE="0660", SYMLINK+="unknown%n"
 
 # KEYSIGHT N6700C
-KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="1102", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply%c"
+KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="1102", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply%n"
 
 # KEYSIGHT E36312
-KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="1102", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply%c"
+KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="1102", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply%n"
 
 # KEYSIGHT U2022
-KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="7f18", GROUP="usbtmc", MODE="0660", SYMLINK+="power_meter%c"
+KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="7f18", GROUP="usbtmc", MODE="0660", SYMLINK+="power_meter%n"
 
 # ROHDE & SCHWARZ FSW43
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="00ca", GROUP="usbtmc", MODE="0660", SYMLINK+="spectrum_analyzer%c"
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="00ca", GROUP="usbtmc", MODE="0660", SYMLINK+="spectrum_analyzer%n"
 
 KERNEL=="usbtmc[0..9]", SUBSYSTEM=="usbmisc", MODE="0666"
 
