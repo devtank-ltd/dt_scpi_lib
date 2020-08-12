@@ -58,12 +58,12 @@ class n6700(scpi_t):
         self.mvoltage = 0;
 
     @property
-    def voltage(self, v):
+    def voltage(self):
         return self.mvoltage
 
     @voltage.setter
-    def voltage(self, enable):
-        self.mvoltage = v
+    def voltage(self, volts):
+        self.mvoltage = volts
         self.gpib.write("VOLT %f,(@%u)" % (v, self.chan))
 
     @property
