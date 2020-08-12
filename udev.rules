@@ -1,17 +1,21 @@
 # TEKTRONIX TDS1012B
 KERNEL=="usb*", ATTRS{idVendor}=="0699", ATTRS{idProduct}=="0366", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c"
 
-# RIGOL DS1000 series
+# KEYSIGHT DSOX1204G
 KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="0396", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c"
 
-# ROHDE & SCHWARZ SMBV100A
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%c"
+# RIGOL DS1000 series
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0396", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c" # the idProduct here is incorrect
 
-# ROHDE & SCHWARZ SMW200A
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%c"
+# ROHDE & SCHWARZ SMBV100A
+# One of the following two rules is wrong 
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%c"
 
 # ROHDE & SCHWARZ SMBV100A
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0023", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%c"
+
+# ROHDE & SCHWARZ UNKNOWN DEVICE
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc", MODE="0660", SYMLINK+="unknown%c"
 
 # KEYSIGHT N6700C
 KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="1102", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply%c"
