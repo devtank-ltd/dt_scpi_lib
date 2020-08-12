@@ -2,7 +2,6 @@
 KERNEL=="usb*", ATTRS{idVendor}=="0699", ATTRS{idProduct}=="0366", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c"
 
 # RIGOL DS1000 series
-# I think this rule is wrong, because the scope at Customer is Rigol-brand, but this says Keysight/Agilent
 KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="0396", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope%c"
 
 # ROHDE & SCHWARZ SMBV100A
@@ -13,6 +12,9 @@ KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc
 
 # ROHDE & SCHWARZ SMBV100A
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0023", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen%c"
+
+# KEYSIGHT N6700C
+KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="1102", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply%c"
 
 # KEYSIGHT E36312
 KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="1102", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply%c"
