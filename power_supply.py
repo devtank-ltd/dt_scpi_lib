@@ -64,7 +64,7 @@ class n6700(scpi_t):
     @voltage.setter
     def voltage(self, volts):
         self.mvoltage = volts
-        self.gpib.write("VOLT %f,(@%u)" % (v, self.chan))
+        self.gpib.write("VOLT %f,(@%u)" % (volts, self.chan))
 
     @property
     def current_limit(self):
