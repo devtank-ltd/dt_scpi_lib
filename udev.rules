@@ -18,7 +18,7 @@ KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0023", GROUP="usbtmc
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc", MODE="0660", SYMLINK+="unknown%n"
 
 # KEYSIGHT N6700C
-KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="1102", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply%n"
+KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="0002", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply%n"
 
 # KEYSIGHT E36312
 KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="1102", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply%n"
