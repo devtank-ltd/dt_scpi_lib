@@ -87,11 +87,11 @@ class e36300(scpi_t):
         self.mvoltage = 0;
 
     @property
-    def voltage(self, v):
+    def voltage(self):
         return self.mvoltage
 
     @voltage.setter
-    def voltage(self, enable):
+    def voltage(self, v):
         self.mvoltage = v
         self.gpib.write("VOLT %f,(@%u)" % (v, self.chan))
 
