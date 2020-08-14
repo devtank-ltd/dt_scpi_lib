@@ -118,6 +118,37 @@ class dummy_substrate(object):
         self.write(string)
         return self.readline()
 
+
+class fet_emulator(object):
+    # This substrate emulates a field-effect transistor;
+    # It measures the gate voltage and always returns the drain current
+    def __init__(self, gate, log=None):
+        self.log = log
+        self.gate = gate
+        if not self.log:
+            self.log = fakelog()
+
+    def write(self, string):
+        self.log.command(string)
+
+    def readline(self):
+        if(self.gate.voltage < -4):
+            return "0"
+        if(self.gate.voltage < -3.4):
+            return "0.1"
+        if(self.gate.voltage < -2.9):
+            return "0.2"
+        if(self.gate.voltage < -2.8):
+            return "0.3"
+        return "20"
+
+    def read(self, string):
+        self.write(string)
+        r = self.readline()
+        self.log.response(r)
+        return r
+
+
 class usbtty(object):
     # A class that tries to behave exactly as does gpib_device above
     def __init__(self, f, log=None):
