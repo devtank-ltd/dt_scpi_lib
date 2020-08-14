@@ -102,7 +102,7 @@ class gpib_device(object):
         return self.serial.readline()
 
 class dummy_substrate(object):
-    def __init__(self):
+    def __init__(self, log=None):
         self.log = log
         if not self.log:
             self.log = fakelog()
