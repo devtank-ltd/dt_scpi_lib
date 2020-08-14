@@ -78,3 +78,32 @@ class n6700(scpi_t):
     @property
     def current(self):
         return float(self.gpib.read("MEASure:CURRent?,(@%u)" % self.chan))
+
+class e36300(scpi_t):
+    def __init__(self, chan, gpib):
+        self.gpib = gpib
+        self.chan = chan
+        self.mcurrent_limit = 0;
+        self.mvoltage = 0;
+
+    @property
+    def voltage(self, v):
+        return self.mvoltage
+
+    @voltage.setter
+    def voltage(self, enable):
+        self.mvoltage = v
+        self.gpib.write("VOLT %f,(@%u)" % (v, self.chan))
+
+    @property
+    def current_limit(self):
+        return self.mcurrent_limit
+
+    @current_limit.setter
+    def current_limit(self, i):
+        self.mcurrent_limit = i
+        self.gpib.write("CURRent %f, (@%u)" % (i, self.chan))
+
+    @property
+    def current(self):
+        return float(self.gpib.read("MEASure:CURRent? CH%u" % self.chan))
