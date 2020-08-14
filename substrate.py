@@ -108,7 +108,7 @@ class dummy_substrate(object):
             self.log = fakelog()
 
     def write(self, string):
-        self.log.command(cmd)
+        self.log.command(string)
 
     def readline(self):
         self.log.response("dummy substrate")
