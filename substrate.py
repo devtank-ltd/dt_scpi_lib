@@ -103,16 +103,20 @@ class gpib_device(object):
 
 class dummy_substrate(object):
     def __init__(self):
-        pass
+        self.log = log
+        if not self.log:
+            self.log = fakelog()
 
     def write(self, string):
-        pass
+        self.log.command(cmd)
 
     def readline(self):
-        pass
+        self.log.response("dummy substrate")
+        return "dummy substrate"
 
     def read(self, string):
-        return ""
+        self.write(string)
+        return self.readline()
 
 class usbtty(object):
     # A class that tries to behave exactly as does gpib_device above
