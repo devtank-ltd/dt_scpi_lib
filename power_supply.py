@@ -69,7 +69,7 @@ class n6700(scpi_t):
 
     @property
     def current(self):
-        return float(self.gpib.read("MEASure:CURRent?,(@%u)" % self.chan))
+        return float(self.gpib.read("MEASure:CURRent? (@%u)" % self.chan))
 
 class n6780a(n6700):
     # Very similar to the N6700C we've got, but supports a few more commands
