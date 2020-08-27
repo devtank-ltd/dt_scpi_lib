@@ -164,6 +164,16 @@ class scpi_sig_gen(scpi_t):
     def opc(self):
         return self.gpib.read("*opc?\n")
 
+    def screenshot(self, filename):
+        self.gpib.write(":HCOPy:DEVice:LANGuage PNG")
+        self.gpib.write(":HCOPy:REGion ALL")
+        self.gpib.write(":HCOPy:EXECute")
+        self.gpib.write(":HCOPy:DATA")
+
+        with open(filename, "w+b") as scrshot:
+            for c in gpib.readblock():
+                scrshot.write(c)
+
 class hp8648(sig_gen_t):
     def __init__(self, tty):
         self.gpib = gpib_device(tty, 5)
@@ -200,4 +210,5 @@ class hp8648(sig_gen_t):
     def power_level(self, level):
         self.mpower_level = level
         self.gpib.write("fm:pow:ampl %d db;" % level)
+
 
