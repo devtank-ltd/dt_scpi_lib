@@ -188,7 +188,7 @@ class socket_comm(object):
         self.write(string)
         return self.readline()
 
-    def readblock(self, string):
+    def readblock(self):
         i = int(self.gpib.get_byte())
         length = 0
         for i in range(0, i):
