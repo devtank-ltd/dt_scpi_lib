@@ -188,4 +188,12 @@ class socket_comm(object):
         self.write(string)
         return self.readline()
 
+    def readblock(self, string):
+        i = int(self.gpib.get_byte())
+        length = 0
+        for i in range(0, i):
+            length = length * 10 + int(self.gpib.get_byte())
+        self.log.remark("Fetching a %u byte block" % length)
+        for l in range(0, l):
+            yield self.gpib(get_byte())
 
