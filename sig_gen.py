@@ -166,9 +166,11 @@ class scpi_sig_gen(scpi_t):
 
     def screenshot(self, filename):
         self.gpib.write(":HCOPy:DEVice:LANGuage PNG")
+        self.gpib.write(":HCOPy:FILE:NAME:AUTO:STATe 1")
         self.gpib.write(":HCOPy:REGion ALL")
         self.gpib.write(":HCOPy:EXECute")
         self.gpib.write(":HCOPy:DATA")
+        fn = self.gpib.read(":HCOPy:FILE:AUTO?")
 
         with open(filename, "w+b") as scrshot:
             for c in self.gpib.readblock():
