@@ -138,7 +138,7 @@ class dsox1204a(oscilloscope_t):
         self.gpib.remark("Fetching a %u byte block" % length)
 
         for l in range(0, l):
-            yield return self.gpib(get_byte())
+            yield self.gpib(get_byte())
 
 
 
