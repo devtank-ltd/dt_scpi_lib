@@ -120,7 +120,7 @@ class dsox1204a(oscilloscope_t):
         # "If a measurement cannot be made (typically because the proper portion of the waveform is not displayed), the value +9.9E+37 is returned for that measurement."
         # So far as I've seen, the scope will return the string "+99E+36" in this case.
         if string == "+99E+36":
-            throw RuntimeError("The RIGOL DSOX1204 oscilloscope did not return a meaningful value")
+            raise RuntimeError("The RIGOL DSOX1204 oscilloscope did not return a meaningful value")
         else:
             return int(string)
 
