@@ -115,6 +115,34 @@ class dsox1204a(oscilloscope_t):
     def is_channel(self, name):
         return name in [self.d0, self.d1, self.d2, self.d3, self.channel1, self.channel2, self.channel3, self.channel3, self.ac]
 
+    def measurement_parse(string):
+        # Quote from the datasheet, page 350:
+        # "If a measurement cannot be made (typically because the proper portion of the waveform is not displayed), the value +9.9E+37 is returned for that measurement."
+        # So far as I've seen, the scope will return the string "+99E+36" in this case.
+        if string == "+99E+36":
+            throw RuntimeError("The RIGOL DSOX1204 oscilloscope did not return a meaningful value")
+        else:
+            return int(string)
+
+    def ieee_block_bytes(self):
+        # TODO: The programming examples in the datasheet (written in some flavor of VBA) call this function "DoQueryIEEEBlock_Bytes"
+        # which hints at the possibility that this format belongs in some IEEE standard. If that's the case, then this method ought to be moved to a superclass
+
+        # The first byte is an ASCII character '1' thru '9', which is the length of the length, and the next 1 to 9 bytes are the
+        # length. So if the block is 100 bytes long, then because 100 is a three-digit number the first four bytes in the block are
+        # "3100". This scheme effectively limits the block length to just shy of 10 kilobytes; have I misunderstood something?
+        i = int(self.gpib.get_byte())
+        length = 0
+        for i in range(0, i):
+            length = length * 10 + int(self.gpib.get_byte())
+        self.gpib.remark("Fetching a %u byte block" % length)
+
+        for l in range(0, l):
+            yield return self.gpib(get_byte())
+
+
+
+
     def trigger_single(self):
         self.gpib.write(":SINGle")
 
@@ -134,4 +162,11 @@ class dsox1204a(oscilloscope_t):
     def amplitude(self, channel=None):
         src = ("" if channel is None else channel)
         self.gpib.write(":MEASure:VAMPlitude %s" % src)
-        return self.gpib.read(":MEASure:VAMPlitude? %s" % src)
+        return self.measurement_parse(self.gpib.read(":MEASure:VAMPlitude? %s" % src))
+
+    def screenshot(self, filename):
+        self.gpib.write(":DISPlay:DATA? PNG, COLor")
+        with open(filename, "w") as f:
+            for c in self.ieee_block_bytes():
+                f.write(c)
+
