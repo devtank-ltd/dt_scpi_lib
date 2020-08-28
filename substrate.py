@@ -172,7 +172,7 @@ class usbtmc(object):
     def readblock(self):
         # For now I'm just going to download and see what the instrument actually returns
         data = b''
-
+        length = 256
         for i in range(0, length):
             c = self._dev.read()
             self.log.response("%x %d\t%c" % (c, c, c))
