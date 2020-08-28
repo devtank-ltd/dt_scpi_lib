@@ -140,8 +140,12 @@ class dsox1204a(oscilloscope_t):
         for l in range(0, l):
             yield self.gpib(get_byte())
 
-
-
+    def screenshot(self, filename):
+        self.gpib.write(":HARDcopy:INKSaver OFF")
+        self.gpib.write(":DISPlay:DATA? PNG, COLor")
+        data = self.gpib.readblock()
+        with open(filename, "w+b") as scrshot:
+            scrshot.write(data)
 
     def trigger_single(self):
         self.gpib.write(":SINGle")
