@@ -137,6 +137,9 @@ class usbtty(object):
         return self.readline()
 
 class usbtmc(object):
+    # Implements the USBTMC protocol
+    # (Does not try to do anything to work around any quirks that various instruments might have)
+
     def __init__(self, devpath, log=None):
         # The file needs to be opened as a binary file, and the strings need to be decoded and encoded.
         # Otherwise the slave device will claim that the query has been interrupted, will will cause the _raw_read method to time out.
@@ -165,6 +168,40 @@ class usbtmc(object):
 
     def readline(self):
         return self._raw_read()
+
+    def readblock(self):
+        # For now I'm just going to download and see what the instrument actually returns
+        data = b''
+
+        for i in range(0, length):
+            c = self._dev.read()
+            self.log.response("%x %d\t%c" % (c, c, c))
+            data += c
+
+class rigol_usbtmc(usbtmc):
+    # This tries 
+    def readblock(self):
+        # Apparently, some RIGOL devices lie about the size of the block length.
+        # Here, an IEEE block starts with a '#' character,
+        # Then a single ASCII digit saying how long the length is,
+        # then the length.
+        # For example, if the block proper is 100 bytes long, then because 100 is a three digit number,
+        # the header will be the five bytes; '#3100'
+        c = self._dev.read()
+        if c != '#':
+            raise RuntimeError("The device did not respond with a valid IEEE block")
+        c = int(self._dev.read())
+        length = 0
+        for i in range(0, c):
+            length = length * 10 + int(self._dev.read())
+
+        self.log.remark("Fetching a block of length %u")
+
+        data = b''
+        for i in range(0, length):
+            data += self._dev.read()
+
+
 
 class socket_comm(object):
     def __init__(self, host, port, log=None):
