@@ -170,8 +170,7 @@ class scpi_sig_gen(scpi_t):
         self.gpib.write(":HCOPy:DATA?")
         data = self.gpib.readblock()
         with open(filename, "w+b") as scrshot:
-            for c in self.gpib.readblock():
-                scrshot.write(data)
+            scrshot.write(data)
 
 class hp8648(sig_gen_t):
     def __init__(self, tty):
