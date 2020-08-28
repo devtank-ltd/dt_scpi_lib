@@ -170,17 +170,6 @@ class usbtmc(object):
         return self._raw_read()
 
     def readblock(self):
-        # For now I'm just going to download and see what the instrument actually returns
-        data = b''
-        length = 256
-        for i in range(0, length):
-            c = self._dev.read()
-            self.log.response("%x %d\t%c" % (c, c, c))
-            data += c
-
-class rigol_usbtmc(usbtmc):
-    # This tries 
-    def readblock(self):
         # Apparently, some RIGOL devices lie about the size of the block length.
         # Here, an IEEE block starts with a '#' character,
         # Then a single ASCII digit saying how long the length is,
@@ -200,7 +189,6 @@ class rigol_usbtmc(usbtmc):
         data = b''
         for i in range(0, length):
             data += self._dev.read()
-
 
 
 class socket_comm(object):
