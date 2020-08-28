@@ -115,10 +115,10 @@ class dsox1204a(oscilloscope_t):
     def is_channel(self, name):
         return name in [self.d0, self.d1, self.d2, self.d3, self.channel1, self.channel2, self.channel3, self.channel3, self.ac]
 
-    def measurement_parse(string):
+    def measurement_parse(self, string):
         # Quote from the datasheet, page 350:
-        # "If a measurement cannot be made (typically because the proper portion of the waveform is not displayed), the value +9.9E+37 is returned for that measurement."
-        # So far as I've seen, the scope will return the string "+99E+36" in this case.
+        # "If a measurement cannot be made (typically because the proper portion of the waveform is not displayed), the value 
+        # +9.9E+37 is returned for that measurement." So far as I've seen, the scope will return the string "+99E+36" in this case.
         if string == "+99E+36":
             raise RuntimeError("The RIGOL DSOX1204 oscilloscope did not return a meaningful value")
         else:
