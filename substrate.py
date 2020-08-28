@@ -192,6 +192,7 @@ class usbtmc(object):
         data = b''
         for i in range(0, length):
             data += self._dev.read(1)
+        return data
 
 
 class socket_comm(object):
