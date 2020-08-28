@@ -165,5 +165,6 @@ class dsox1204a(oscilloscope_t):
 
     def amplitude(self, channel=None):
         src = ("" if channel is None else channel)
+        self.gpib.write(":MEASure:SOURce %s")
         self.gpib.write(":MEASure:VAMPlitude %s" % src)
         return self.measurement_parse(self.gpib.read(":MEASure:VAMPlitude? %s" % src))
