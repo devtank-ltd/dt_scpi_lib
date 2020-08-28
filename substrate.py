@@ -176,19 +176,19 @@ class usbtmc(object):
         # then the length.
         # For example, if the block proper is 100 bytes long, then because 100 is a three digit number,
         # the header will be the five bytes; '#3100'
-        c = self._dev.read()
-        if c != '#':
+        c = self._dev.read(1)
+        if c != b'#':
             raise RuntimeError("The device did not respond with a valid IEEE block")
-        c = int(self._dev.read())
+        c = int(self._dev.read(1))
         length = 0
         for i in range(0, c):
-            length = length * 10 + int(self._dev.read())
+            length = length * 10 + int(self._dev.read(1))
 
         self.log.remark("Fetching a block of length %u")
 
         data = b''
         for i in range(0, length):
-            data += self._dev.read()
+            data += self._dev.read(1)
 
 
 class socket_comm(object):
