@@ -167,10 +167,3 @@ class dsox1204a(oscilloscope_t):
         src = ("" if channel is None else channel)
         self.gpib.write(":MEASure:VAMPlitude %s" % src)
         return self.measurement_parse(self.gpib.read(":MEASure:VAMPlitude? %s" % src))
-
-    def screenshot(self, filename):
-        self.gpib.write(":DISPlay:DATA? PNG, COLor")
-        with open(filename, "w") as f:
-            for c in self.ieee_block_bytes():
-                f.write(c)
-
