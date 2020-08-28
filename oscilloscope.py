@@ -168,3 +168,6 @@ class dsox1204a(oscilloscope_t):
         self.gpib.write(":MEASure:SOURce %s")
         self.gpib.write(":MEASure:VAMPlitude %s" % src)
         return self.measurement_parse(self.gpib.read(":MEASure:VAMPlitude? %s" % src))
+
+    def system_error(self):
+        return self.gpib.read("SYSTem:ERRor?")
