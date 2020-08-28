@@ -20,7 +20,7 @@ class stderr_log(object):
         self.name = name
 
     def command(self, string):
-        print("sent to       %s:" % (self.name, string), file=sys.stderr, flush=True)
+        print("sent to       %s: \"%s\"" % (self.name, string), file=sys.stderr, flush=True)
 
     def response(self, string):
         print("received from %s: \"%s\"" % (self.name, string), file=sys.stderr, flush=True)
