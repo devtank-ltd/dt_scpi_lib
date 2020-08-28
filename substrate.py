@@ -187,7 +187,7 @@ class usbtmc(object):
         for i in range(0, c):
             length = length * 10 + int(self._dev.read(1))
 
-        self.log.remark("Fetching a block of length %u")
+        self.log.remark("Fetching a block of length %u" % length)
 
         data = b''
         for i in range(0, length):
