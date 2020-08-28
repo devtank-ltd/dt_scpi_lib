@@ -141,7 +141,7 @@ class scpi_sig_gen(scpi_t):
     @rf_power.setter
     def rf_power(self, enable):
         self.mrf_power = enable
-        self.gpib.write("outp %s;\n" % ("1" if enable else "0"))
+        self.gpib.write("outp %s;" % ("1" if enable else "0"))
 
     @property
     def freq(self):
@@ -150,7 +150,7 @@ class scpi_sig_gen(scpi_t):
     @freq.setter
     def freq(self, freq):
         self.mfreq = freq
-        self.gpib.write("freq %fGHz;\n" % (freq/float((1000.0*1000.0*1000.0))))
+        self.gpib.write("freq %fGHz;" % (freq/float((1000.0*1000.0*1000.0))))
     
     @property
     def power_level(self):
@@ -159,16 +159,14 @@ class scpi_sig_gen(scpi_t):
     @power_level.setter
     def power_level(self, level):
         self.mpower_level = level
-        self.gpib.write("pow %f;\n" % level)
-
-    def opc(self):
-        return self.gpib.read("*opc?\n")
+        self.gpib.write("pow %f;" % level)
 
     def screenshot(self, filename):
         self.gpib.write(":HCOPy:DEVice:LANGuage PNG")
         self.gpib.write(":HCOPy:FILE:NAME:AUTO:STATe 1")
         self.gpib.write(":HCOPy:REGion ALL")
         self.gpib.write(":HCOPy:EXECute")
+        self.gpib.read(":HCOPy:FILE:AUTO:FILE?")
         self.gpib.write(":HCOPy:DATA?")
         data = self.gpib.readblock()
         with open(filename, "w+b") as scrshot:
