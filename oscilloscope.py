@@ -148,6 +148,10 @@ class dsox1204a(oscilloscope_t, ieee488_t):
         with open(filename, "w+b") as scrshot:
             scrshot.write(data)
 
+    def channel_autoscale(self, channel):
+        assert(self.is_channel(channel))
+        self.gpib.write(":AUToscale %s" % channel)
+
     def channel_scale(self, channel, scale):
         assert(self.is_channel(channel))
         self.gpib.write(":%s:SCALe %f" % (channel, scale))
