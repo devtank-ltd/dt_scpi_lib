@@ -2,6 +2,7 @@ from collections import namedtuple
 import sys
 import os
 import time
+from dt_scpi_lib.ieee488 import ieee488_t, scpi_t
 
 class oscilloscope_t(object):
 
