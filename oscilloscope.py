@@ -153,6 +153,12 @@ class dsox1204a(oscilloscope_t):
     def trigger_force(self):
         self.gpib.write(":TRIGger:FORCe")
 
+    def trigger_auto(self):
+        self.gpib.write(":TRIGger:SWEep AUTO")
+
+    def trigger_normal(self):
+        self.gpib.write(":TRIGger:SWEep NORMal")
+
     def trigger_edge(self, source, edge_type): 
         assert(self.is_channel(source))
         self.gpib.write(":TRIGger:MODe EDGE")
