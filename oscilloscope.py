@@ -148,6 +148,14 @@ class dsox1204a(oscilloscope_t, ieee488_t):
         with open(filename, "w+b") as scrshot:
             scrshot.write(data)
 
+    def channel_scale(self, channel, scale):
+        assert(self.is_channel(channel))
+        self.gpib.write(":%s:SCALe %f" % (channel, scale))
+
+    def channel_offset(self, channel, offset):
+        assert(self.is_channel(channel))
+        self.gpib.write(":%s:OFFSet %f" % (channel, offset))
+
     def trigger_single(self):
         self.gpib.write(":SINGle")
 
