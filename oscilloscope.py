@@ -154,11 +154,11 @@ class dsox1204a(oscilloscope_t, ieee488_t):
 
     def channel_scale(self, channel, scale):
         assert(self.is_channel(channel))
-        self.gpib.write(":%s:SCALe %f" % (channel, scale))
+        self.gpib.write(":%s:SCALe %fV" % (channel, scale))
 
     def channel_offset(self, channel, offset):
         assert(self.is_channel(channel))
-        self.gpib.write(":%s:OFFSet %f" % (channel, offset))
+        self.gpib.write(":%s:OFFSet %fV" % (channel, offset))
 
     def trigger_single(self):
         self.gpib.write(":SINGle")
