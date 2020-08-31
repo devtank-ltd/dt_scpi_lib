@@ -92,7 +92,7 @@ class rigol_ds1000z_t(oscilloscope_t):
     def amplitude(self):
         return self.gpib.read(":MEASure:VAMPlitude?")
 
-class dsox1204a(oscilloscope_t):
+class dsox1204a(oscilloscope_t, ieee488_t):
     # It's true; this oscilloscope has some SCPI-like language, but actually is not SCPI.
     # And it also does not accept most IEEE-488.2 commands either
     d0 = "D0"
