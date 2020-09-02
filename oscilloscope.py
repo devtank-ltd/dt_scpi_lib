@@ -12,8 +12,13 @@ class oscilloscope_t(object):
     def stop():
         self.gpib.write(":stop")
 
+    @property
     def idn(self):
-        return self.gpib.read("*idn?;")
+        return self.gpib.read("*idn?")
+
+    @idn.setter
+    def idn(self, enable):
+        raise NotImplementedError
 
 class tektronix_tds(oscilloscope_t):
 
