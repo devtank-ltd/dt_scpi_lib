@@ -123,7 +123,7 @@ class dsox1204a(oscilloscope_t, ieee488_t):
         if string == "+99E+36":
             raise RuntimeError("The RIGOL DSOX1204 oscilloscope did not return a meaningful value")
         else:
-            return int(string)
+            return float(string)
 
     def ieee_block_bytes(self):
         # TODO: The programming examples in the datasheet (written in some flavor of VBA) call this function "DoQueryIEEEBlock_Bytes"
