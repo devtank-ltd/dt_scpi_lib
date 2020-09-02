@@ -1,4 +1,5 @@
 from collections import namedtuple
+from dt_scpi_lib.ieee488 import ieee488_t, scpi_t
 import sys
 import os
 import time
@@ -54,7 +55,7 @@ class network_analyser_t(object):
     def do_sweep(self):
         raise NotImplementedError
 
-class hp8720d(network_analyser_t):
+class hp8720d(network_analyser_t, ieee488_t):
     def __init__(self, f):
         self.gpib = f
         self.mstart_freq = 0
@@ -140,9 +141,6 @@ class hp8720d(network_analyser_t):
         # The second value is not significant
         # The third value is the marker's frequency (horizontal position on the display)
         return float(self.gpib.read("OUTPMARK;").split(',')[0].strip())
-
-    def idn(self):
-        return self.gpib.read("*idn?;")
 
     def serial_number(self):
         return self.gpib.read("outpsern;")
