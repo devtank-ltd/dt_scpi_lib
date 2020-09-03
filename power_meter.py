@@ -42,7 +42,7 @@ class u2020_t(scpi_t):
         self.gpib.write("SENS:SWE:APER 500E-6") # Sets the aperture to cover the signal pulse width, which in this case is 500 μs.
         self.gpib.write("TRIG:DEL 50E-6") # Sets the trigger delay to 50 μs.
         time.sleep(1)
-        self.gpib.write("FETC?") # Fetches the reading.
+        self.gpib.read("FETC?") # Fetches the reading.
 
     def pulsed(self, freq, delay, time):
         # freq is the frequency in Hz
