@@ -37,12 +37,12 @@ class u2020_t(scpi_t):
     def example3(self):
         # This is the GSM timeslot example from the datasheet.
         # It shouldn't crash the power meter, should it?
-        self.gpib.write("SENS:DET:FUNC AVER") // Sets the measurement mode to average.
-        self.gpib.write("TRIG:SOUR EXT") // Sets the trigger source to external trigger input.
-        self.gpib.write("SENS:SWE:APER 500E-6") // Sets the aperture to cover the signal pulse width, which in this case is 500 μs.
-        self.gpib.write("TRIG:DEL 50E-6") // Sets the trigger delay to 50 μs.
+        self.gpib.write("SENS:DET:FUNC AVER") # Sets the measurement mode to average.
+        self.gpib.write("TRIG:SOUR EXT") # Sets the trigger source to external trigger input.
+        self.gpib.write("SENS:SWE:APER 500E-6") # Sets the aperture to cover the signal pulse width, which in this case is 500 μs.
+        self.gpib.write("TRIG:DEL 50E-6") # Sets the trigger delay to 50 μs.
         time.sleep(1)
-        self.gpib.write("FETC?") // Fetches the reading.
+        self.gpib.write("FETC?") # Fetches the reading.
 
     def pulsed(self, freq, delay, time):
         # freq is the frequency in Hz
