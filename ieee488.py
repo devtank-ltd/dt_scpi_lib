@@ -27,6 +27,9 @@ class ieee488_t(object):
     def rst(self):
         self.gpib.write("*rst")
 
+    def stb(self):
+        self.gpib.write("*stb?")
+
 
 class scpi_t(ieee488_t):
 
