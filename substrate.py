@@ -142,7 +142,7 @@ class excruciating_debug_substrate(object):
     def _raw_read(self):
         r = ""
         c = ""
-        while c != "\n"
+        while c != "\n":
             c = self._dev.readline(1).decode()
             self.log.response(r)
             r += c
