@@ -28,11 +28,30 @@ class power_meter_t(ieee488_t):
 class u2020_t(scpi_t):
     def __init__(self, gpib):
         self.gpib = gpib
+        
+        # Do the same as what the pcap dump from Thomas does
+        ignore_me = self.idn
+        self.opc()
+        self.cls()
+        self.esr()
+        self.rst()
+        self.esr()
+        
+        self.unit_power_q()
+        self.unit_power_watts()
+        self.esr()
 
     def system_error(self):
         # Overridden because this power meter works subtly differently from the SCPI standard
         # and so does not support the :NEXT query of the SYSTem:ERRor subsystem
         return self.gpib.read("SYSTem:ERRor?")
+
+    def unit_power_q(self):
+        return self.gpib.read("UNIT1:POW?")
+    def unit_power_db(self):
+        self.gpib.read("UNIT1:POW DB")
+    def unit_power_watts(self):
+        self.gpib.read("UNIT1:POW W")
 
     def example3(self):
         # This is the GSM timeslot example from the datasheet.
