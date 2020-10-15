@@ -33,13 +33,13 @@ class u2020_t(scpi_t):
         ignore_me = self.idn
         self.opc()
         self.cls()
-        self.esr()
+        self.esrQ()
         self.rst()
-        self.esr()
+        self.esrQ()
         
         self.unit_power_q()
         self.unit_power_watts()
-        self.esr()
+        self.esrQ()
 
     def system_error(self):
         # Overridden because this power meter works subtly differently from the SCPI standard
