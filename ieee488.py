@@ -18,16 +18,19 @@ class ieee488_t(object):
         self.gpib.write("*OPC")
 
     def opcQ(self):
-        self.gpib.write("*OPC?")
+        return self.gpib.write("*OPC?")
 
     def cls(self):
         self.gpib.write("*CLS")
+
+    def esrQ(self):
+        return self.gpib.write("*ESR?");
 
     def rst(self):
         self.gpib.write("*RST")
 
     def stbQ(self):
-        self.gpib.write("*STB?")
+        return self.gpib.write("*STB?")
 
 
 class scpi_t(ieee488_t):
