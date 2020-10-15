@@ -49,9 +49,9 @@ class u2020_t(scpi_t):
     def unit_power_q(self):
         return self.gpib.read("UNIT1:POW?")
     def unit_power_db(self):
-        self.gpib.read("UNIT1:POW DB")
+        self.gpib.write("UNIT1:POW DB")
     def unit_power_watts(self):
-        self.gpib.read("UNIT1:POW W")
+        self.gpib.write("UNIT1:POW W")
 
     def example3(self):
         # This is the GSM timeslot example from the datasheet.
