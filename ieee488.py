@@ -17,8 +17,7 @@ class ieee488_t(object):
     def opc(self):
         self.gpib.write("*OPC")
 
-    @property
-    def opc(self):
+    def opcQ(self):
         self.gpib.write("*OPC?")
 
     def cls(self):
@@ -27,7 +26,7 @@ class ieee488_t(object):
     def rst(self):
         self.gpib.write("*RST")
 
-    def stb(self):
+    def stbQ(self):
         self.gpib.write("*STB?")
 
 
