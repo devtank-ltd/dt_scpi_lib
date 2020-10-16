@@ -73,9 +73,11 @@ class u2020_t(scpi_t):
 
     def trigger_single(self):
         self.gpib.write("INIT1:CONT 0")
+        self.gpib.write("TRIG:DEL:AUTO 0")
 
     def trigger_continuous(self):
         self.gpib.write("INIT1:CONT 1")
+        self.gpib.write("TRIG:DEL:AUTO 0")
 
     def read(self, ch):
         return self.gpib.read("READ%d?" % ch)
