@@ -46,12 +46,18 @@ class u2020_t(scpi_t):
         # and so does not support the :NEXT query of the SYSTem:ERRor subsystem
         return self.gpib.read("SYSTem:ERRor?")
 
-    def unit_power_q(self):
-        return self.gpib.read("UNIT1:POW?")
-    def unit_power_db(self):
-        self.gpib.write("UNIT1:POW DB")
-    def unit_power_watts(self):
-        self.gpib.write("UNIT1:POW W")
+    def unit_power_q(self, unit):
+        return self.gpib.read("UNIT%d:POW?" % unit)
+    def unit_power_db(self, unit):
+        self.gpib.write("UNIT%d:POW DB" % unit)
+    def unit_power_watts(self, unit):
+        self.gpib.write("UNIT%d:POW W" % unit)
+
+    def calc_math_expressionQ(self, block):
+        return self.gpib.read("CALC%d:MATH?" % block)
+
+    def calc_math_feed(self, block, feed):
+        return self.gpib.read("CALC%d:FEED%d?" % (block, feed))
 
     def example3(self):
         # This is the GSM timeslot example from the datasheet.
