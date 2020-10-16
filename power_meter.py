@@ -26,6 +26,12 @@ class power_meter_t(ieee488_t):
         raise NotImplementedError
 
 class u2020_t(scpi_t):
+
+    peak_power = "POW:PEAK"
+    peak_to_average_power = "POW:PTAV"
+    average_power = "POW:AVER"
+    minimum_power = "POW_MIN"
+    
     def __init__(self, gpib):
         self.gpib = gpib
         
@@ -58,6 +64,12 @@ class u2020_t(scpi_t):
 
     def calc_math_feedQ(self, block, feed):
         return self.gpib.read("CALC%d:FEED%d?" % (block, feed))
+
+    def calc_math_feed(self, block, feed, f, sweep = None):
+        if sweep is None:
+            self.gpib.write("CALC%d:FEED%d \"%s\"" % (block, feed, f))
+        else:
+            self.gpib.write("CALC%d:FEED%d \"%s ON SWEEP %d\"" % (block, feed, f, sweep))
 
     def example3(self):
         # This is the GSM timeslot example from the datasheet.
