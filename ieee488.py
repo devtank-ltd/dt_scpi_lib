@@ -24,7 +24,7 @@ class ieee488_t(object):
         self.gpib.write("*CLS")
 
     def esrQ(self):
-        return self.gpib.write("*ESR?");
+        return self.gpib.read("*ESR?");
 
     def rst(self):
         self.gpib.write("*RST")
