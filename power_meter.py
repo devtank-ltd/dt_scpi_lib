@@ -30,7 +30,7 @@ class u2020_t(scpi_t):
     peak_power = "POW:PEAK"
     peak_to_average_power = "POW:PTAV"
     average_power = "POW:AVER"
-    minimum_power = "POW_MIN"
+    minimum_power = "POW:MIN"
     
     def __init__(self, gpib):
         self.gpib = gpib
