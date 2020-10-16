@@ -56,7 +56,7 @@ class u2020_t(scpi_t):
     def calc_math_expressionQ(self, block):
         return self.gpib.read("CALC%d:MATH?" % block)
 
-    def calc_math_feed(self, block, feed):
+    def calc_math_feedQ(self, block, feed):
         return self.gpib.read("CALC%d:FEED%d?" % (block, feed))
 
     def example3(self):
