@@ -80,5 +80,5 @@ class u2020_t(scpi_t):
         self.gpib.write("TRIG:DEL:AUTO 0")
 
     def read(self, ch):
-        return self.gpib.read("READ%d?" % ch)
+        return float(self.gpib.read("READ%d?" % ch))
 
