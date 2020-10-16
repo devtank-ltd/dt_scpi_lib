@@ -76,7 +76,9 @@ class u2020_t(scpi_t):
 
     def trigger_continuous(self):
         self.gpib.write("INIT1:CONT 1")
-    
+
+    def read(self, ch):
+        return self.gpib.read("READ%d?" % ch)
 
     def example3(self):
         # This is the GSM timeslot example from the datasheet.
