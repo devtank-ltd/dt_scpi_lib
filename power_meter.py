@@ -71,6 +71,13 @@ class u2020_t(scpi_t):
         else:
             self.gpib.write("CALC%d:FEED%d \"%s ON SWEEP %d\"" % (block, feed, f, sweep))
 
+    def trigger_single(self):
+        self.gpib.write("INIT1:CONT 0")
+
+    def trigger_continuous(self):
+        self.gpib.write("INIT1:CONT 1")
+    
+
     def example3(self):
         # This is the GSM timeslot example from the datasheet.
         # It shouldn't crash the power meter, should it?
