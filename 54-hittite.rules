@@ -1,0 +1,3 @@
+# I cannot remember why this is in a separate file. I have a feeling it mihgt not be usbtmc
+
+ATTRS{idVendor}=="1eba", ATTRS{idProduct}=="2220", SYMLINK+="hmct2220", MODE="0666", GROUP="dialout"

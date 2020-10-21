@@ -1,5 +1,5 @@
 install:
 	# installs the udev rules and retriggers them
-	cp udev.rules /etc/udev/rules.d/53-usbtmc.rules
+	cp *.rules /etc/udev/rules.d/
 	udevadm control --reload-rules
 	udevadm trigger
