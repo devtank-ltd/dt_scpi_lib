@@ -14,8 +14,8 @@ KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc
 # ROHDE & SCHWARZ SMBV100A
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0023", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen_smbv100a"
 
-# ROHDE & SCHWARZ UNKNOWN DEVICE
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc", MODE="0660", SYMLINK+="unknown%n"
+# ROHDE & SCHWARZ SMBV200A
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen_smbv200a"
 
 # KEYSIGHT N6700C
 KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="0002", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply_n6700c"
