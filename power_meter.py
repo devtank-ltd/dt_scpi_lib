@@ -81,6 +81,14 @@ class u2020_t(scpi_t):
         self.gpib.write("INIT1:CONT 1")
         self.gpib.write("TRIG:DEL:AUTO 0")
 
+    def cal_zero(self):
+        self.gpib.write("CAL:AUTO ONCE")
+        self.gpib.write("CAL:ZERO:AUTO ONCE")
+
+    def list_errors(self):
+        while self.esrQ() = "+16":
+            self.system_error()
+
     def read(self, ch):
         return float(self.gpib.read("READ%d?" % ch))
 
