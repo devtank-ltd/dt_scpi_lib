@@ -59,8 +59,14 @@ class u2020_t(scpi_t):
         self.gpib.write("UNIT%d:POW DB" % unit)
     def unit_power_watts(self, unit):
         self.gpib.write("UNIT%d:POW W" % unit)
-    def frequency(self, sensor, freq):
-        self.gpib.write("SENS%d:FREQ %d" % (sensor, freq))
+
+    @property
+    def frequency(self):
+        return float(self.gpib.read("SENS1:FREQ?"))
+
+    @frequency.setter
+    def frequency(self, freq):
+        self.gpib.write("SENS:FREQ %d" % freq)
 
     def calc_math_expressionQ(self, block):
         return self.gpib.read("CALC%d:MATH?" % block)
