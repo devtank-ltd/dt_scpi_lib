@@ -44,7 +44,7 @@ class u2020_t(scpi_t):
         self.esrQ()
         
         self.unit_power_q(1)
-        self.unit_power_watts(1)
+        self.unit_power_db(1)
         self.esrQ()
 
     def system_error(self):
