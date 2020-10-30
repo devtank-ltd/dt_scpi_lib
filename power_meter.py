@@ -46,6 +46,7 @@ class u2020_t(scpi_t):
         self.unit_power_q(1)
         self.unit_power_db(1)
         self.esrQ()
+        self.list_errors()
 
     def system_error(self):
         # Overridden because this power meter works subtly differently from the SCPI standard
@@ -86,7 +87,7 @@ class u2020_t(scpi_t):
         self.gpib.write("CAL:ZERO:AUTO ONCE")
 
     def list_errors(self):
-        while self.esrQ() = "+16":
+        while self.esrQ() == "+16":
             self.system_error()
 
     def read(self, ch):
