@@ -80,6 +80,9 @@ class u2020_t(scpi_t):
         else:
             self.gpib.write("CALC%d:FEED%d \"%s ON SWEEP %d\"" % (block, feed, f, sweep))
 
+    def conf(self, block):
+        return self.gpib.read("CONF%d?" % block)
+
     def trigger_single(self):
         self.gpib.write("INIT1:CONT 0")
         self.gpib.write("TRIG:DEL:AUTO 0")
