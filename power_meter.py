@@ -121,6 +121,7 @@ class u2020_t(scpi_t):
         self.calc_math_feed(2, 1, "POW:PEAK")
         self.calc_math_feed(2, 2, "POW:AVER")
         self.calc_math_expression(2, "(SENS1)")
+        self.gpib.write("SENS1:AVER 0")
         # I am fairly certain that all of the following is unnecessary.
         self.gpib.write("TRAC1:MEAS:TILT:UNIT PCT")
         self.gpib.write("TRIG1:DEL:AUTO 0")
