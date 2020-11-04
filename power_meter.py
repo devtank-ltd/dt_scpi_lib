@@ -121,6 +121,12 @@ class u2020_t(scpi_t):
         self.calc_math_feed(2, 1, "POW:PEAK")
         self.calc_math_feed(2, 2, "POW:AVER")
         self.calc_math_expression(2, "(SENS1)")
+        # I am fairly certain that all of the following is unnecessary.
+        for t in ["TRAC1:UNIT?", "TRAC1:STAT?", "TRAC1:DEF:TRAN:REF?", "TRAC1:DEF:DUR:REF?", "TRAC1:MEAS:TILT:UNIT PCT", "SENS1:BAND:VID?", "PST1:CCDF:DAT:MAX?", "SENS1:AVER?" ,
+                "SENS1:AVER:COUN:AUTO?", "SENS1:AVER:COUN?", "SENS1:CORR:GAIN2:STAT?", "SENS1:CORR:GAIN2?", "SENS1:AVER:SDET?", "SENS1:FREQ?", "SENS1:AVER2:COUNT?", "SENS1:AVER2:STATE?",
+                "TRIG1:DEL:AUTO 0", "INIT1:CONT?", "TRIG1:DEL:AUTO?", "TRIG1:SOUR?", "OUTP:REC1:STAT?", "OUTP:REC1:LIM:LOW?", "SERV:BIST:VID:STAT?"
+            self.gpib.read(t)
+        
         self.calibrate()
 
     def read(self, ch):
