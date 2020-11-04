@@ -68,6 +68,9 @@ class u2020_t(scpi_t):
     def frequency(self, freq):
         self.gpib.write("SENS:FREQ %d" % freq)
 
+    def calc_math_expression(self, block, expr):
+        return self.gpib.read("CALC%d:MATH \"%s\"" % block)
+
     def calc_math_expressionQ(self, block):
         return self.gpib.read("CALC%d:MATH?" % block)
 
@@ -98,6 +101,27 @@ class u2020_t(scpi_t):
     def list_errors(self):
         while self.esrQ() == "+16":
             self.system_error()
+
+    def calibrate(self):
+        self.gpib.write("CAL1:ALL")
+        self.system_error()
+
+    def setup_customer_padcal(self):
+        self.trigger_single()
+        for b in [1, 2, 3, 4]:
+            self.gpib.write("UNIT%d:POW W" % b)
+            self.gpib.read("CALC%d:MATH?" % b)
+            self.gpib.read("CALC%d:FEED1?" % b)
+            self.gpib.read("CALC%d:FEED2?" % b)
+        self.gpib.write("SENS1:AVER:COUN 8")
+        self.gpib.write("TRAC1:MEAS:TILT:UNIT PCT")
+        self.calc_math_feed(1, 1, "POW:AVER")
+        self.calc_math_feed(1, 2, "POW:AVER")
+        self.calc_math_expression(1, "(SENS1)")
+        self.calc_math_feed(2, 1, "POW:PEAK")
+        self.calc_math_feed(2, 2, "POW:AVER")
+        self.calc_math_expression(2, "(SENS1)")
+        self.calibrate()
 
     def read(self, ch):
         return float(self.gpib.read("READ%d?" % ch))
