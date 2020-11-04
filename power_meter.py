@@ -69,7 +69,7 @@ class u2020_t(scpi_t):
         self.gpib.write("SENS:FREQ %d" % freq)
 
     def calc_math_expression(self, block, expr):
-        return self.gpib.read("CALC%d:MATH \"%s\"" % (block, expr))
+        return self.gpib.write("CALC%d:MATH \"%s\"" % (block, expr))
 
     def calc_math_expressionQ(self, block):
         return self.gpib.read("CALC%d:MATH?" % block)
