@@ -56,7 +56,7 @@ class u2020_t(scpi_t):
     def unit_power_q(self, unit):
         return self.gpib.read("UNIT%d:POW?" % unit)
     def unit_power_db(self, unit):
-        self.gpib.write("UNIT%d:POW DB" % unit)
+        self.gpib.write("UNIT%d:POW DBM" % unit)
     def unit_power_watts(self, unit):
         self.gpib.write("UNIT%d:POW W" % unit)
 
