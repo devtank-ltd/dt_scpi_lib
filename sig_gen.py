@@ -160,6 +160,35 @@ class scpi_sig_gen(scpi_t):
     def power_level(self, level):
         self.mpower_level = level
         self.gpib.write("pow %f;" % level)
+        self.freq = self.freq
+
+    def freqQ(self):
+        return int(self.gpib.read("freq?;"))
+
+
+class smbv100a(scpi_sig_gen):
+    def __init__(self, tty):
+        self.gpib = tty
+        self.gpib.write("*RST;")
+        self.mfreq = self.freqQ()
+        self.mrf_power = False
+
+    def single_pulse(self, period, width):
+        # period is specified in nanoseconds,
+        # width ditto.
+        def durstr(ns):
+            if ns > 1000:
+                return "%d us" % int(ns / 1000)
+            else:
+                return "%d ns" % int(ns)
+
+        self.gpib.write(":PULM:MODE SING")
+        self.gpib.write("PULM:PER %s" % durstr(period))
+        self.gpib.write("PULM:WIDT %s" % durstr(width))
+        self.gpib.write("PULM:STAT ON")
+
+    def continuous_wave(self):
+        self.gpib.write("PULM:STAT OFF") # turn off PWM.
 
     def screenshot(self, filename):
         self.gpib.write(":HCOPy:DEVice:LANGuage PNG")
