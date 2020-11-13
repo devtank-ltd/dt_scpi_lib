@@ -66,7 +66,7 @@ class u2020_t(scpi_t):
 
     @frequency.setter
     def frequency(self, freq):
-        self.gpib.write("SENS:FREQ %d khz" % freq)
+        self.gpib.write("SENS:FREQ %d" % freq)
 
     def calc_math_expression(self, block, expr):
         return self.gpib.write("CALC%d:MATH \"%s\"" % (block, expr))
