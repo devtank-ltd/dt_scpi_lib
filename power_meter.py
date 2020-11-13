@@ -99,8 +99,9 @@ class u2020_t(scpi_t):
         self.gpib.write("CAL:ZERO:AUTO ONCE")
 
     def list_errors(self):
-        while self.esrQ() == "+16":
-            self.system_error()
+        error = ""
+        while not error.startswith("+0"):
+            error = self.system_error()
 
     def calibrate(self):
         self.gpib.write("CAL1:ALL")
