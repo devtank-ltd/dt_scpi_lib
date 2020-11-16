@@ -170,7 +170,7 @@ class smbv100a(scpi_sig_gen):
     def __init__(self, tty):
         self.gpib = tty
         self.gpib.write("*RST;")
-        self.mfreq = self.freqQ()
+        self.mfreq = 0
         self.mrf_power = False
 
     def single_pulse(self, period, width):
