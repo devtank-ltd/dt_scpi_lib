@@ -201,6 +201,12 @@ class smbv100a(scpi_sig_gen):
         with open(filename, "w+b") as scrshot:
             scrshot.write(data)
 
+    def save(self, slot):
+        self.gpib.write("*SAV %d" % slot)
+    def recall(self, slot):
+        self.gpib.write("*RCL %d" % slot)
+        
+
 class hp8648(sig_gen_t):
     def __init__(self, tty):
         self.gpib = gpib_device(tty, 5)
