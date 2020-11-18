@@ -110,7 +110,7 @@ class u2020_t(scpi_t):
     def setup_customer_padcal(self):
         self.trigger_single()
         for b in [1, 2, 3, 4]:
-            self.gpib.write("UNIT%d:POW W" % b)
+            self.unit_power_db(b)
             self.gpib.read("CALC%d:MATH?" % b)
             self.gpib.read("CALC%d:FEED1?" % b)
             self.gpib.read("CALC%d:FEED2?" % b)
