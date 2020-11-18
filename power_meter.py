@@ -114,7 +114,6 @@ class u2020_t(scpi_t):
             self.gpib.read("CALC%d:MATH?" % b)
             self.gpib.read("CALC%d:FEED1?" % b)
             self.gpib.read("CALC%d:FEED2?" % b)
-        self.gpib.write("SENS1:AVER:COUN 8")
         self.gpib.write("TRAC1:MEAS:TILT:UNIT PCT")
         self.calc_math_feed(1, 1, "POW:AVER")
         self.calc_math_feed(1, 2, "POW:AVER")
