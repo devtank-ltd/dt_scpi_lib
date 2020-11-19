@@ -213,10 +213,15 @@ class smw200a(scpi_sig_gen):
         self.mfreq = 0
         self.mrf_power = False
 
+    @property
+    def freq(self):
+        return self.mfreq
+    
+    @freq.setter
     def freq(self, hz):
         self.gpib.write("SOURce1:FREQuency:MODE CW")
         self.gpib.write("SOURce1:FREQuency:CW %d" % hz)
-        self.gpib.read("SOURce1:FREQuency:CW?")
+        self.mfreq = int(self.gpib.read("SOURce1:FREQuency:CW?"))
 
     def single_pulse(self, period, width):
         # period is specified in nanoseconds,
