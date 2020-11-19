@@ -205,6 +205,51 @@ class smbv100a(scpi_sig_gen):
         self.gpib.write("*SAV %d" % slot)
     def recall(self, slot):
         self.gpib.write("*RCL %d" % slot)
+
+class smw200a(scpi_sig_gen):
+    def __init__(self, tty):
+        self.gpib = tty
+        self.gpib.write("*RST;")
+        self.mfreq = 0
+        self.mrf_power = False
+
+    def freq(self, hz):
+        self.gpib.write("SOURce1:FREQuency:MODE CW")
+        self.gpib.write("SOURce1:FREQuency:CW %d" % hz)
+        self.gpib.read("SOURce1:FREQuency:CW?")
+
+    def single_pulse(self, period, width):
+        # period is specified in nanoseconds,
+        # width ditto.
+        def durstr(ns):
+            if ns > 1000:
+                return "%d us" % int(ns / 1000)
+            else:
+                return "%d ns" % int(ns)
+
+        self.gpib.write(":PULM:MODE SING")
+        self.gpib.write("PULM:PER %s" % durstr(period))
+        self.gpib.write("PULM:WIDT %s" % durstr(width))
+        self.gpib.write("PULM:STAT ON")
+
+    def continuous_wave(self):
+        self.gpib.write("PULM:STAT OFF") # turn off PWM.
+
+    def screenshot(self, filename):
+        self.gpib.write(":HCOPy:DEVice:LANGuage PNG")
+        self.gpib.write(":HCOPy:FILE:NAME:AUTO:STATe 1")
+        self.gpib.write(":HCOPy:REGion ALL")
+        self.gpib.write(":HCOPy:EXECute")
+        self.gpib.read(":HCOPy:FILE:AUTO:FILE?")
+        self.gpib.write(":HCOPy:DATA?")
+        data = self.gpib.readblock()
+        with open(filename, "w+b") as scrshot:
+            scrshot.write(data)
+
+    def save(self, slot):
+        self.gpib.write("*SAV %d" % slot)
+    def recall(self, slot):
+        self.gpib.write("*RCL %d" % slot)
         
 
 class hp8648(sig_gen_t):
