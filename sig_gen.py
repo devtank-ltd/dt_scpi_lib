@@ -209,6 +209,7 @@ class smw200a(scpi_sig_gen):
     def __init__(self, tty):
         self.gpib = tty
         self.gpib.write("*RST;")
+        self.gpib.timeout = 10
         self.mfreq = 0
         self.mrf_power = False
 
@@ -218,10 +219,9 @@ class smw200a(scpi_sig_gen):
     
     @freq.setter
     def freq(self, hz):
-        self.gpib.write("SOURce1:FREQuency:MODE CW")
-        self.gpib.write("SOURce1:FREQuency:CW %d; *OPC;" % hz)
-        while not self.gpib.read("*OPC?"):
-            time.sleep(.01)
+        self.gpib.write("SOUR1:FREQ %d HZ;" % hz)
+        time.sleep(1)
+        self.gpib.read("*OPC?")
         self.mfreq = hz
 
     def single_pulse(self, period, width):
