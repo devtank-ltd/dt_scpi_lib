@@ -160,7 +160,6 @@ class scpi_sig_gen(scpi_t):
     def power_level(self, level):
         self.mpower_level = level
         self.gpib.write("pow %f;" % level)
-        self.freq = self.freq
 
     def freqQ(self):
         return int(self.gpib.read("freq?;"))
