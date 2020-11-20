@@ -3,7 +3,6 @@ import os
 import serial
 import time
 import socket
-import select
 from stat import *
 
 class fakelog(object):
@@ -45,10 +44,6 @@ class log(object):
     def response(self, string):
         with open(self.fn, self.mode) as f:
             f.write("<<< " + string + '\n')
-
-    def remark(self, string):
-        with open(self.fn, self.mode) as f:
-            f.write("... " + string + '\n')
 
 class prologix_substrate(object):
     def prologix_print(self, string):
@@ -217,7 +212,6 @@ class usbtmc(object):
         self._dev = open(devpath, "r+b")
         self._eol = "\n"
         self.log = log
-        self.timeout = 5
         if not self.log:
             self.log = fakelog()
 
@@ -226,15 +220,9 @@ class usbtmc(object):
         self._dev.write(cmd.encode() + self._eol.encode())
 
     def _raw_read(self):
-        for i in range(self.timeout):
-            r, w, e = select.select([ self._dev ], [], [], 0)
-            if self._dev in r:
-                r = self._dev.readline().rstrip().decode()
-                self.log.response(r)
-                return r
-            self.log.remark("time passes...")
-            time.sleep(1)
-
+        r = self._dev.readline().rstrip().decode()
+        self.log.response(r)
+        return r
 
     def write(self, cmd):
         self._raw_write(cmd)
