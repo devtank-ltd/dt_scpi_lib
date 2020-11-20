@@ -252,6 +252,8 @@ class smw200a(scpi_sig_gen):
         with open(filename, "w+b") as scrshot:
             scrshot.write(data)
 
+    def system_errors_all(self):
+        return self.gpib.read(":SYSTem:ERRor:ALL?")
     def save(self, slot):
         self.gpib.write("*SAV %d" % slot)
     def recall(self, slot):
