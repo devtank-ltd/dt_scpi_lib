@@ -9,6 +9,7 @@ KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0396", GROUP="usbtmc
 
 # ROHDE & SCHWARZ SMBV100A
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0023", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen_smbv100a"
+KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen_smbv100a"
 
 # ROHDE & SCHWARZ SMW200A
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen_smw200a"
@@ -24,9 +25,6 @@ KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="7f18", GROUP="u
 
 # ROHDE & SCHWARZ FSW43
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="00ca", GROUP="usbtmc", MODE="0660", SYMLINK+="spectrum_analyzer_fsw43"
-
-# ROHDE & SCHWARZ unknown device
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc", MODE="0660", SYMLINK+="rohde_schwarz_unknown_device"
 
 
 KERNEL=="usbtmc[0..9]", SUBSYSTEM=="usbmisc", MODE="0666"
