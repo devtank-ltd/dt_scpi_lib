@@ -4,6 +4,8 @@ import serial
 import time
 import socket
 from stat import *
+import fcntl
+import datetime
 
 class fakelog(object):
     def __init__(self):
@@ -209,18 +211,40 @@ class usbtmc(object):
         # The file needs to be opened as a binary file, and the strings need to be decoded and encoded.
         # Otherwise the slave device will claim that the query has been interrupted, will will cause the _raw_read method to time out.
         # I am not sure why this is.
-        self._dev = open(devpath, "r+b")
+        self._dev = open(devpath, "r+b", buffering=0)
+        fd = self._dev.fileno()
+        flag = fcntl.fcntl(fd, fcntl.F_GETFL)
+        fcntl.fcntl(fd, fcntl.F_SETFD, flag | os.O_NONBLOCK)
         self._eol = "\n"
         self.log = log
+        self.timeout = 5
         if not self.log:
             self.log = fakelog()
 
     def _raw_write(self, cmd):
         self.log.command(cmd)
         self._dev.write(cmd.encode() + self._eol.encode())
+        self._dev.flush()
 
     def _raw_read(self):
-        r = self._dev.readline().rstrip().decode()
+        begin = datetime.datetime.now()
+        deadline = datetime.datetime.now() + datetime.timedelta(seconds=self.timeout)
+        r = b""
+        try:
+            c = self._dev.read(1)
+            while c:
+                if datetime.datetime.now() > deadline:
+                    self.log.remark("Timeout event after %d seconds, having received \"%s\"" % (self.timeout, r))
+                    raise TimeoutError("Timeout event after %d seconds, having received \"%s\"" % (self.timeout, r))
+                r += c
+                c = self._dev.read(1)
+                if c == b'\n':
+                    break
+        except TimeoutError as e:
+            self.log.remark("Timeout event after %d seconds, having received \"%s\"" % (self.timeout, r))
+            raise e
+        r = r.rstrip().decode()
+
         self.log.response(r)
         return r
 
@@ -228,8 +252,15 @@ class usbtmc(object):
         self._raw_write(cmd)
 
     def read(self, cmd):
+        print("cmd", cmd)
         self.write(cmd)
-        return self._raw_read()
+        #return self._raw_read()
+        try:
+            return self._raw_read()
+        except TimeoutError as e:
+            time.sleep(1)
+            print("retry")
+            return self._raw_read()
 
     def readline(self):
         return self._raw_read()
