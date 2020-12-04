@@ -57,26 +57,27 @@ class prologix_tty():
         self.log = log
         if not self.log:
             self.log = fakelog()
-        self.write("++mode 1")
-        self.write("++ifc")
-        self.write("++read_tmo_ms 500")
-        self.write("++eoi 1")
+        self.file.write("++mode 1".encode())
+        self.file.write("++ifc".encode())
+        self.file.write("++read_tmo_ms 500".encode())
+        self.file.write("++eoi 1".encode())
 
     def write(self, addr, string):
         if self.addr != addr:
-            self.file.write("++addr %u" % addr)
+            self.log.command(("++addr %u" % addr))
+            self.file.write(("++addr %u" % addr).encode())
             self.addr = addr
         self.file.write(string.encode())
         self.log.command(string)
 
     def read_eoi(self):
-        self.write("++read eoi")
+        self.write("++read eoi".encode())
         a = self.file.readline().rstrip().decode()
         self.log.response(a)
         return a
 
     def read_lf(self):
-        self.write("++read 10")
+        self.write("++read 10".encode())
         a = self.file.readline().rstrip().decode()
         self.log.response(a)
         return a
