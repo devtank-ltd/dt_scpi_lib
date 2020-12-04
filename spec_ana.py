@@ -1,3 +1,6 @@
+from dt_scpi_lib.parameter import *
+from dt_scpi_lib.ieee488 import ieee488_t, scpi_t
+
 from collections import namedtuple
 import sys
 import os
@@ -62,34 +65,16 @@ class spec_ana_t(object):
     def read_marker(self):
         raise NotImplementedError
 
-class agilent_8563(spec_ana_t):
+class agilent_8563(object):
     def __init__(self, serial):
         self.gpib = serial
-        self.mcentre_frequency = 0
-        self.msweep_time = 0 
+        self.centre_freq = frequency_t(memoizing_parameter_t(serial, lambda hz: "cf %.4f hz;" % freq))
+        self.freq_span = frequency_t(memoizing_parameter_t(serial, lambda hz: "sp %.4f hz;" % freq))
+        self.sweep_time = timespan_t(memoizing_parameter_t(serial, lambda ms: "st %.4f ms" % ms))
         self.mres_band_width = 0
-        self.mfreq_span = 0
         self.mref_level = 0
         self.mdivider = 0
         self.reset()
-
-    @property
-    def centre_freq(self):
-        return self.mcentre_frequency
-
-    @centre_freq.setter
-    def centre_freq(self, freq):
-        self.gpib.write("cf %.4f;" % (freq/1000000000.0))
-        self.mcentre_frequency = freq
-
-    @property
-    def sweep_time(self):
-        return self.msweep_time
-
-    @sweep_time.setter
-    def sweep_time(self, ms):
-        self.gpib.write("st %d;\n" % (ms/1000.0))
-        self.msweep_time = ms
 
     @property
     def res_band_width(self):
@@ -99,15 +84,6 @@ class agilent_8563(spec_ana_t):
     def res_band_width(self, width):
         self.gpib.write("rb %d;" % width)
         self.mres_band_width = width
-
-    @property
-    def freq_span(self):
-        return self.mfreq_span
-
-    @freq_span.setter
-    def freq_span(self, freq):
-        self.gpib.write("sp %.4f;" % (freq/1000000000.0))
-        self.mfreq_span = freq
 
     @property
     def ref_level(self):
