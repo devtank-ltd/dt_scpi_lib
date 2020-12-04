@@ -8,10 +8,9 @@ class parameter_t(object):
     """
     Use in objects representing test & measurement devices
     """
-    def __init__(self, parent, lambda setter, lambda getter):
+    def __init__(self, parent, setter):
         self.parent = parent
         self.setter = setter
-        self.getter = getter
         self.minimum, self.maximum, self.value = None, None, None
 
     def get(self):
@@ -26,8 +25,9 @@ class parameter_t(object):
 
 class memoizing_parameter_t(parameter_t):
 
-    def __init(self):
+    def __init(self, parent, setter):
         self.ready = False
+        super().__init__(parent, setter)
 
     def get(self):
         if self.ready:
@@ -58,7 +58,7 @@ class lockable_parameter_t(parameter_t):
         self.ready = False
         self.value = None
         self.locklist = locklist
-        if self.locklist is None
+        if self.locklist is None:
             self.locklist = []
 
     def append(self, lock):
@@ -109,7 +109,7 @@ class frequency_t(parameter_t):
 
     @khz.setter
     def mhz(self, value):
-        self.mhz = value * 1000
+        self.khz = value * 1000
 
     @property
     def ghz(self):
@@ -118,3 +118,26 @@ class frequency_t(parameter_t):
     @ghz.setter
     def ghz(self, value):
         self.mhz = value * 1000
+
+class timespan_t(parameter_t):
+    def __init__(self, param):
+        self.param = param
+
+    def __getattr__(self, name):
+        return getattr(self.param, name)
+
+    @property
+    def milliseconds(self):
+        return self.get()
+
+    @milliseconds.setter
+    def milliseconds(self, value):
+        self.set(value)
+
+    @property
+    def seconds(self):
+        return self.ms / 1000.0
+
+    @seconds.setter
+    def seconds(self, value):
+        self.ms = value * 1000
