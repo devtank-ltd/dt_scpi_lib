@@ -6,75 +6,20 @@ import sys
 import os
 import time
 
-class spec_ana_t(object):
-
-    @property
-    def centre_freq(self):
-        raise NotImplementedError
-
-    @centre_freq.setter
-    def centre_freq(self, freq):
-        raise NotImplementedError
-
-    @property
-    def sweep_time(self):
-        raise NotImplementedError
-
-    @sweep_time.setter
-    def sweep_time(self, ms):
-        raise NotImplementedError
-
-    @property
-    def res_band_width(self):
-        raise NotImplementedError
-
-    @res_band_width.setter
-    def res_band_width(self):
-        raise NotImplementedError
-
-    @property
-    def freq_span(self):
-        raise NotImplementedError
-
-    @freq_span.setter
-    def freq_span(self, freq):
-        raise NotImplementedError
-
-    @property
-    def ref_level(self):
-        raise NotImplementedError
-
-    @ref_level.setter
-    def ref_level(self, db):
-        raise NotImplementedError
-
-    @property
-    def divider(self):
-        raise NotImplementedError
-
-    @divider.setter
-    def divider(self, db):
-        raise NotImplementedError
-
-    def do_sweep(self):
-        raise NotImplementedError
-
-    def marker_to_peak(self):
-        raise NotImplementedError
-
-    def read_marker(self):
-        raise NotImplementedError
-
 class agilent_8563(object):
     def __init__(self, serial):
         self.gpib = serial
-        self.centre_freq = frequency_t(memoizing_parameter_t(serial, lambda hz: "cf %.4f hz;" % freq))
-        self.freq_span = frequency_t(memoizing_parameter_t(serial, lambda hz: "sp %.4f hz;" % freq))
+        self.centre_freq = frequency_t(memoizing_parameter_t(serial, lambda hz: "cf %.4f hz;" % hz))
+        self.freq_span = frequency_t(memoizing_parameter_t(serial, lambda hz: "sp %.4f hz;" % hz))
         self.sweep_time = timespan_t(memoizing_parameter_t(serial, lambda ms: "st %.4f ms" % ms))
         self.mres_band_width = 0
         self.mref_level = 0
         self.mdivider = 0
         self.reset()
+
+    @property
+    def errors(self):
+        return self.gpib.read("ERR?").split(",")
 
     @property
     def res_band_width(self):
