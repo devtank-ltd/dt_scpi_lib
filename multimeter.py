@@ -20,13 +20,13 @@ class multimeter_t(object):
     def idn(self, enable):
         raise NotImplementedError
 
-class keithley2110(multimeter_t, ieee488_t):
+class keithley2110(scpi_t):
 
     def __init__(self, f):
         self.gpib = f
    
     def display(self, message):
-        self.gpib.write(":DISPlay:TEXT %s" % message)
+        self.gpib.write(":DISPlay:TEXT \"%s\"" % message)
 
     def display_clear(self):
         self.gpib.write(":DISPlay:TEXT:CLEar")
