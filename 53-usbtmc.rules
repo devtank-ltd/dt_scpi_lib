@@ -28,6 +28,8 @@ KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="00ca", GROUP="usbtmc
 # ROHDE & SCHWARZ unknown device
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc", MODE="0660", SYMLINK+="rohde_schwarz_unknown_device"
 
+# KEITHLEY 2110
+KERNEL=="usb*", ATTRS{idVendor}=="05e6", ATTRS{idProduct}=="2110", GROUP="usbtmc", MODE="0660", SYMLINK+="keithley_multimeter_2110"
 
 KERNEL=="usbtmc[0..9]", SUBSYSTEM=="usbmisc", MODE="0666"
 
