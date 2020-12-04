@@ -50,40 +50,33 @@ class log(object):
         with open(self.fn, self.mode) as f:
             f.write("... " + string + '\n')
 
-class prologix_substrate(object):
-    def prologix_print(self, string):
-        self.file.write(string.encode())
-
-    def gpib_print(self, string):
-        self.log.command(string)
-        self.file.write(string.encode())
-
+class prologix_tty():
     def __init__(self, f, log=None):
-        self.file = f
-        self.prologix_print("++mode 1\n++ifc\n++read_tmo_ms 500\n")
+        self.file = serial.Serial(f)
         self.addr = None
         self.log = log
         if not self.log:
             self.log = fakelog()
+        self.write("++mode 1")
+        self.write("++ifc")
+        self.write("++read_tmo_ms 500")
+        self.write("++eoi 1")
 
-    @property
-    def address(self):
-        return self.addr
+    def write(self, addr, string):
+        if self.addr != addr:
+            self.file.write("++addr %u" % addr)
+            self.addr = addr
+        self.file.write(string.encode())
+        self.log.command(string)
 
-    @address.setter
-    def address(self, address):
-        if self.addr != address:
-            self.addr = address
-            self.prologix_print('++addr %u\n' % address)
+    def read_eoi(self):
+        self.write("++read eoi")
+        a = self.file.readline().rstrip().decode()
+        self.log.response(a)
+        return a
 
-    def write(self, string):
-        self.gpib_print(string + "\n")
-
-    def flush(self):
-        self.file.flush()
-
-    def readline(self):
-        self.prologix_print("++read 10\n")
+    def read_lf(self):
+        self.write("++read 10")
         a = self.file.readline().rstrip().decode()
         self.log.response(a)
         return a
@@ -97,17 +90,15 @@ class gpib_device(object):
             self.log = fakelog()
 
     def write(self, string):
-        self.serial.address = self.address
-        self.log.command(cmd)
-        self.serial.write(string)
+        self.log.command(string)
+        self.serial.write(self.address, string)
 
     def readline(self):
-        return self.serial.readline()
+        return self.serial.read_eoi()
 
     def read(self, string):
-        self.serial.address = self.address
-        self.serial.write(string)
-        return self.serial.readline()
+        self.write(string)
+        return self.readline()
 
 class dummy_substrate(object):
     def __init__(self, log=None):
@@ -210,12 +201,12 @@ class usbtmc(object):
     # Implements the USBTMC protocol
     # (Does not try to do anything to work around any quirks that various instruments might have)
 
-    def __init__(self, devpath, log=None):
+    def __init__(self, devpath, log=None, eol="\n"):
         # The file needs to be opened as a binary file, and the strings need to be decoded and encoded.
         # Otherwise the slave device will claim that the query has been interrupted, will will cause the _raw_read method to time out.
         # I am not sure why this is.
         self._dev = open(devpath, "r+b")
-        self._eol = "\n"
+        self._eol = eol
         self.log = log
         self.timeout = 5
         if not self.log:
