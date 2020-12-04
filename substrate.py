@@ -6,31 +6,42 @@ import socket
 import select
 from stat import *
 
+class stdout_log(object):
+    def __init__(self, tag):
+        self.tag = ((16 - len(tag[:16])) * " ") + tag
+
+    def emit(self, string):
+        print(string)
+
+    def revelations(self, string):
+        return string.replace("\n", "\\n").replace("\r", "\\r")
+
+    def command(self, string):
+        self.emit(self.tag + " >>> \"" + self.revelations(string) + "\"")
+
+    def remark(self, string):
+        self.emit(self.tag + " ... \"" + self.revelations(string) + "\"")
+
+    def response(self, string):
+        self.emit(self.tag + " <<< \"" + self.revelations(string) + "\"")
+
 class fakelog(object):
     def __init__(self):
         pass
 
-    def command(self, string):
+    def emit(self, string):
         pass
 
-    def response(self, string):
-        pass
+class stderr_log(stdout_log):
+    def __init__(self, tag):
+        super().__init__(tag)
 
-class stderr_log(object):
-    def __init__(self, name):
-        self.name = name
+    def emit(self, string):
+        print(string, file=sys.stderr, flush=True)
 
-    def command(self, string):
-        print("sent to       %s: \"%s\"" % (self.name, string), file=sys.stderr, flush=True)
-
-    def response(self, string):
-        print("received from %s: \"%s\"" % (self.name, string), file=sys.stderr, flush=True)
-
-    def remark(self, string):
-        print("remark about  %s: \"%s\"" % (self.name, string), file=sys.stderr, flush=True)
-
-class log(object):
-    def __init__(self, fn):
+class log(stdout_log):
+    def __init__(self, tag, fn):
+        super().__init__(tag)
         self.fn = fn
         open(fn, 'a').close() # Create the file if it doesn't exist
         if S_ISSOCK(os.stat(fn).st_mode):
@@ -38,17 +49,9 @@ class log(object):
         else:
             self.mode = 'a'
 
-    def command(self, string):
+    def emit(self, string):
         with open(self.fn, self.mode) as f:
-            f.write(">>> " + string + '\n')
-
-    def response(self, string):
-        with open(self.fn, self.mode) as f:
-            f.write("<<< " + string + '\n')
-
-    def remark(self, string):
-        with open(self.fn, self.mode) as f:
-            f.write("... " + string + '\n')
+            f.write(string + '\n')
 
 class prologix_tty():
     def __init__(self, f, log=None):
@@ -57,42 +60,44 @@ class prologix_tty():
         self.log = log
         if not self.log:
             self.log = fakelog()
-        self.file.write("++mode 1".encode())
-        self.file.write("++ifc".encode())
-        self.file.write("++read_tmo_ms 500".encode())
-        self.file.write("++eoi 1".encode())
+        for s in ["++mode 1", "++ifc", "++read_tmo_ms 500", "++eoi 1", "++eos 2"]:
+            self.dwrite(s)
+
+    def dwrite(self, string):
+        self.log.command("\n" + string + "\n")
+        self.file.write(("\n" + string + "\n").encode())
 
     def write(self, addr, string):
         if self.addr != addr:
-            self.log.command(("++addr %u" % addr))
-            self.file.write(("++addr %u" % addr).encode())
+            self.dwrite("++addr %u" % addr)
             self.addr = addr
         self.file.write(string.encode())
         self.log.command(string)
 
     def read_eoi(self):
-        self.write("++read eoi".encode())
+        self.dwrite("++read eoi")
         a = self.file.readline().rstrip().decode()
         self.log.response(a)
         return a
 
     def read_lf(self):
-        self.write("++read 10".encode())
+        self.dwrite("++read 10")
         a = self.file.readline().rstrip().decode()
         self.log.response(a)
         return a
 
 class gpib_device(object):
-    def __init__(self, substrate, address, log=None):
+    def __init__(self, substrate, address, eol="", log=None):
         self.serial = substrate
         self.address = address
         self.log = log
+        self.eol = eol
         if not self.log:
             self.log = fakelog()
 
     def write(self, string):
         self.log.command(string)
-        self.serial.write(self.address, string)
+        self.serial.write(self.address, string + self.eol)
 
     def readline(self):
         return self.serial.read_eoi()
