@@ -9,8 +9,8 @@ class hp8720d(ieee488_t):
     def __init__(self, f):
         self.gpib = f
         self.mpower_level = 0
-        self.gpib.write("DEBU1;") # debugging info on VNA's screen
         self.gpib.write("*RST;")
+        self.gpib.write("DEBU1;") # debugging info on VNA's screen
        # self.gpib.read("OPC?;PRES;CHAN2;REFP9;")
         #self.gpib.read("OPC?;SING;")
         self.start_freq = frequency_t(memoizing_parameter_t(f, lambda hz: "STAR%d HZ;" % hz))
