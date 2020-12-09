@@ -221,7 +221,8 @@ class smw200a(scpi_sig_gen):
     def freq(self, hz):
         self.gpib.write("SOUR1:FREQ %d HZ;" % hz)
         time.sleep(1)
-        self.gpib.read("SOUR1:FREQ?")
+        while int(self.gpib.read("SOUR1:FREQ?")) != hz:
+            time.sleep(1)
         self.mfreq = hz
 
     def single_pulse(self, period, width):
