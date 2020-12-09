@@ -219,9 +219,8 @@ class smw200a(scpi_sig_gen):
     
     @freq.setter
     def freq(self, hz):
-        self.gpib.write("SOUR1:FREQ %d HZ;" % hz)
-        time.sleep(1)
         while int(self.gpib.read("SOUR1:FREQ?")) != hz:
+            self.gpib.write("SOUR1:FREQ %d HZ;" % hz)
             time.sleep(1)
         self.mfreq = hz
 
