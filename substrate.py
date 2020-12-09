@@ -47,6 +47,10 @@ class log(object):
         with open(self.fn, self.mode) as f:
             f.write("<<< " + string + '\n')
 
+    def remark(self, string):
+        with open(self.fn, self.mode) as f:
+            f.write("... " + string + '\n')
+
 class prologix_substrate(object):
     def prologix_print(self, string):
         self.file.write(string.encode())
