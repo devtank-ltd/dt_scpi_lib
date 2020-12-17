@@ -13,14 +13,19 @@ class parameter_t(object):
         self.setter = setter
         self.minimum, self.maximum, self.value = None, None, None
 
+    def query(self):
+        return self.parent.read(self.getter())
+
     def get(self):
-        self.value = self.parent.read(self.getter())
+        self.value = self.query()
         return self.value
 
-    def set(self, value):
+    def boundscheck(value):
         assert self.minimum is None or value >= self.minimum
         assert self.maximum is None or value <= self.maximum
-        self.value = value
+
+    def set(self, value):
+        self.boundscheck(value)
         self.parent.write(self.setter(value))
 
 class memoizing_parameter_t(parameter_t):
@@ -33,13 +38,29 @@ class memoizing_parameter_t(parameter_t):
         if self.ready:
             return self.value
         else:
-            return super().get()
+            super().get()
+            self.ready = True
+            return self.value
 
     def set(self, value):
         self.ready = True
         self.value = value
         super().set(value)
 
+class requerying_parameter_t(parameter_t):
+    # Some instruments don't actually set the thing until you query it. 
+    # We may never know why
+    def set(self, value):
+        super().set(value)
+        self.value = self.query()
+
+
+class integer_constant_t(memoizing_parameter_t):
+    def set(self, value):
+        raise Exception("This parameter cannot be set")
+
+    def get(self):
+        return(super().get())
 
 class lockable_parameter_t(parameter_t):
     """
