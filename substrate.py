@@ -53,6 +53,14 @@ class log(stdout_log):
         with open(self.fn, self.mode) as f:
             f.write(string + '\n')
 
+class teelog(stdout_log):
+    def __init__(self, loglist):
+        self.loglist = loglist
+
+    def emit(selF, string):
+        for l in self.loglist:
+            l.emit(string)
+
 class prologix_tty():
     def __init__(self, f, log=None):
         self.file = serial.Serial(f)
