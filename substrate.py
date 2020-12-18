@@ -131,66 +131,6 @@ class dummy_substrate(object):
         self.write(string)
         return self.readline()
 
-class excruciating_debug_substrate(object):
-    # "Kinda" Implements the USBTMC protocol
-    # (trying to debug that keysight power meter we have)
-
-    def __init__(self, devpath, log=None):
-        # The file needs to be opened as a binary file, and the strings need to be decoded and encoded.
-        # Otherwise the slave device will claim that the query has been interrupted, will will cause the _raw_read method to time out.
-        # I am not sure why this is.
-        self._dev = open(devpath, "r+b")
-        self._eol = "\n"
-        self.log = log
-        if not self.log:
-            self.log = fakelog()
-
-    def _raw_write(self, cmd):
-        self.log.command(cmd)
-        self._dev.write(cmd.encode() + self._eol.encode())
-
-    def _raw_read(self):
-        r = ""
-        c = ""
-        while c != "\n":
-            c = self._dev.readline(1).decode()
-            self.log.response(r)
-            r += c
-            self.log.response(r)
-        return r
-
-    def write(self, cmd):
-        self._raw_write(cmd)
-
-    def read(self, cmd):
-        self.write(cmd)
-        return self._raw_read()
-
-    def readline(self):
-        return self._raw_read()
-
-    def readblock(self):
-        # Apparently, some RIGOL devices lie about the size of the block length.
-        # Here, an IEEE block starts with a '#' character,
-        # Then a single ASCII digit saying how long the length is,
-        # then the length.
-        # For example, if the block proper is 100 bytes long, then because 100 is a three digit number,
-        # the header will be the five bytes; '#3100'
-        c = self._dev.read(1)
-        if c != b'#':
-            raise RuntimeError("The device did not respond with a valid IEEE block")
-        c = int(self._dev.read(1))
-        length = 0
-        for i in range(0, c):
-            length = length * 10 + int(self._dev.read(1))
-
-        self.log.remark("Fetching a block of length %u" % length)
-
-        data = b''
-        for i in range(0, length):
-            data += self._dev.read(1)
-        return data
-
 
 class usbtty(object):
     # A class that tries to behave exactly as does gpib_device above
