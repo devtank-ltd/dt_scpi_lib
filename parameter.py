@@ -14,7 +14,7 @@ class parameter_t(object):
         self.minimum, self.maximum, self.value = None, None, None
 
     def query(self):
-        return self.parent.read(self.getter())
+        return self.parent.read(self.getter)
 
     def get(self):
         self.value = self.query()
@@ -27,6 +27,14 @@ class parameter_t(object):
     def set(self, value):
         self.boundscheck(value)
         self.parent.write(self.setter(value))
+
+    def __str__(self):
+        return self.get()
+
+    def __call__(self, val=None):
+        if val is not None:
+            self.set(val)
+        return self.get()
 
 class memoizing_parameter_t(parameter_t):
 
@@ -55,12 +63,19 @@ class requerying_parameter_t(parameter_t):
         self.value = self.query()
 
 
-class integer_constant_t(memoizing_parameter_t):
+class constant_t(memoizing_parameter_t):
+    def __init__(self, parent):
+        super().__init__(parent, None)
+
     def set(self, value):
         raise Exception("This parameter cannot be set")
 
     def get(self):
-        return(super().get())
+        return super().get()
+
+class integer_constant_t(constant_t):
+    def get(self):
+        return int(super().get())
 
 class lockable_parameter_t(parameter_t):
     """
