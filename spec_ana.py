@@ -63,7 +63,7 @@ class agilent_8563(object):
     def reset(self):
         self.gpib.write("ip;")
 
-class e4440(spec_ana_t):
+class e4440(object):
     def __init__(self, serial):
         self.gpib = gpib_device(serial, 18)
         self.mcentre_frequency = 0
