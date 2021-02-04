@@ -20,13 +20,13 @@ class multimeter_t(object):
     def idn(self, enable):
         raise NotImplementedError
 
-class keithley2110(multimeter_t, ieee488_t):
+class keithley2110(scpi_t):
 
     def __init__(self, f):
         self.gpib = f
    
     def display(self, message):
-        self.gpib.write(":DISPlay:TEXT %s" % message)
+        self.gpib.write(":DISPlay:TEXT \"%s\"" % message)
 
     def display_clear(self):
         self.gpib.write(":DISPlay:TEXT:CLEar")
@@ -35,8 +35,23 @@ class keithley2110(multimeter_t, ieee488_t):
         self.gpib.write(":DISPlay %u" % (1 if onoff else 0))
 
     def dc_voltage(self):
-        self.gpib.write('FUNCtion "VOLTage"')
+        self.gpib.write('FUNCtion "VOLTage:DC"')
         self.gpib.write('VOLT:RANGe:AUTO 1')
+        return self.gpib.read("READ?")
+
+    def ac_voltage(self):
+        self.gpib.write('FUNCtion "VOLTage:AC"')
+        self.gpib.write('VOLT:RANGe:AUTO 1')
+        return self.gpib.read("READ?")
+
+    def dc_current(self):
+        self.gpib.write('FUNCtion "CURRent:DC"')
+        self.gpib.write('CURR:RANGe:AUTO 1')
+        return self.gpib.read("READ?")
+
+    def ac_current(self):
+        self.gpib.write('FUNCtion "CURRent:AC"')
+        self.gpib.write('CURR:RANGe:AUTO 1')
         return self.gpib.read("READ?")
 
     def system_error(self):

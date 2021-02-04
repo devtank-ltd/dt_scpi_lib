@@ -1,103 +1,27 @@
 from collections import namedtuple
 from dt_scpi_lib.ieee488 import ieee488_t, scpi_t
+from dt_scpi_lib.parameter import *
 import sys
 import os
 import time
 
-class network_analyser_t(object):
-
-    @property
-    def start_freq(self):
-        raise NotImplementedError
-
-    @start_freq.setter
-    def start_freq(self, freq):
-        raise NotImplementedError
-
-    @property
-    def stop_freq(self):
-        raise NotImplementedError
-
-    @stop_freq.setter
-    def stop_freq(self, freq):
-        raise NotImplementedError
-
-    @property
-    def power_level(self):
-        raise NotImplementedError
-
-    @power_level.setter
-    def power_level(self, level):
-        raise NotImplementedError
-
-    @property
-    def sweep_pnt_count(self):
-        raise NotImplementedError
-
-    @sweep_pnt_count.setter
-    def sweep_pnt_count(self, pnts):
-        raise NotImplementedError
-
-    @property
-    def rf_power(self):
-        raise NotImplementedError
-
-    @rf_power.setter
-    def rf_power(self, enable):
-        raise NotImplementedError
-
-    def set_marker(self, freq):
-        raise NotImplementedError
-
-    def read_marker(self):
-        raise NotImplementedError
-
-    def do_sweep(self):
-        raise NotImplementedError
-
-class hp8720d(network_analyser_t, ieee488_t):
+class hp8720d(ieee488_t):
     def __init__(self, f):
         self.gpib = f
-        self.mstart_freq = 0
-        self.mstop_freq = 0
         self.mpower_level = 0
-        self.gpib.read("OPC?;PRES;CHAN2;REFP9;")
-        self.gpib.read("OPC?;SING;")
-        self.gpib.readline()
+        self.gpib.write("*RST;")
+        self.gpib.write("DEBU1;") # debugging info on VNA's screen
+       # self.gpib.read("OPC?;PRES;CHAN2;REFP9;")
+        #self.gpib.read("OPC?;SING;")
+        self.start_freq = frequency_t(memoizing_parameter_t(f, lambda hz: "STAR%d HZ;" % hz))
+        self.stop_freq = frequency_t(memoizing_parameter_t(f, lambda hz: "STOP%d HZ;" % hz))
+        self.start_freq.maximum = 20000000000
+        self.start_freq.minimum = 50000000
+        self.stop_freq.maximum = 20000000000
+        self.stop_freq.minimum = 50000000
 
     def cal(self, slot):
         self.gpib.write("RECA%u;" % slot)
-
-    def frequencyformat(self, freq):
-        if freq % (1000 * 1000 * 1000) == 0:
-            return "%d ghz" % (freq / (1000 * 1000 * 1000))
-        if freq % (1000 * 1000) == 0:
-            return "%d mhz" % (freq / (1000 * 1000))
-        if freq % (1000) == 0:
-            return "%d khz" % (freq / (1000))
-        return "%d hz" % freq
-
-    @property
-    def start_freq(self):
-        return self.mstart_freq
-
-    @start_freq.setter
-    def start_freq(self, freq):
-        assert freq > 50000000, "The device does not support frequencies below 50MHz."
-        assert freq < 20000000000, "The device does not support frequencies above 20GHz"
-        self.mstart_freq = freq
-        self.gpib.write("STAR%s;" % self.frequencyformat(freq))
-
-    @property
-    def stop_freq(self):
-        return self.mstop_freq
-
-    @stop_freq.setter
-    def stop_freq(self, freq):
-        assert freq > 50000000, "The device does not support frequencies below 50MHz."
-        assert freq < 20000000000, "The device does not support frequencies above 20GHz"
-        self.mstop_freq = freq
-        self.gpib.write("STOP%s;" % self.frequencyformat(freq))
 
     @property
     def power_level(self):
