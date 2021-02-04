@@ -157,22 +157,28 @@ class usbtmc(object):
     # Implements the USBTMC protocol
     # (Does not try to do anything to work around any quirks that various instruments might have)
 
-    def __init__(self, devpath, log=None, eol="\n"):
+    def __init__(self, devpath, log=None, eol="\n", timeout=0):
         # The file needs to be opened as a binary file, and the strings need to be decoded and encoded.
         # Otherwise the slave device will claim that the query has been interrupted, will will cause the _raw_read method to time out.
         # I am not sure why this is.
         self._dev = open(devpath, "r+b")
         self._eol = eol
         self.log = log
-        self.timeout = 5
+        self.timeout = timeout
         if not self.log:
             self.log = fakelog()
 
     def _raw_write(self, cmd):
         self.log.command(cmd)
         self._dev.write(cmd.encode() + self._eol.encode())
+        self._dev.flush()
 
     def _raw_read(self):
+        if self.timeout == 0:
+            r = self._dev.readline().rstrip().decode()
+            self.log.response(r)
+            return r
+
         for i in range(self.timeout):
             r, w, e = select.select([ self._dev ], [], [], 0)
             if self._dev in r:
