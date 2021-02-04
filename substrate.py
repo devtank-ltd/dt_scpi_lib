@@ -35,14 +35,15 @@ class fakelog(object):
 
 class stderr_log(stdout_log):
     def __init__(self, tag):
-        super().__init__(tag)
+        stdout_log.__init__(self, tag)
 
     def emit(self, string):
-        print(string, file=sys.stderr, flush=True)
+        print(string, file=sys.stderr)
+        sys.stderr.flush()
 
 class log(stdout_log):
     def __init__(self, tag, fn):
-        super().__init__(tag)
+        stdout_log.__init__(self, tag)
         self.fn = fn
         open(fn, 'a').close() # Create the file if it doesn't exist
         if S_ISSOCK(os.stat(fn).st_mode):
