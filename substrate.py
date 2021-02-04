@@ -185,12 +185,12 @@ class usbtmc(object):
             while c:
                 if datetime.datetime.now() > deadline:
                     self.log.remark("Timeout event after %d seconds, having received \"%s\"" % (self.timeout, r))
-                    raise TimeoutError("Timeout event after %d seconds, having received \"%s\"" % (self.timeout, r))
+                    raise IOError("Timeout event after %d seconds, having received \"%s\"" % (self.timeout, r))
                 r += c
                 c = self._dev.read(1)
                 if c == b'\n':
                     break
-        except TimeoutError as e:
+        except IOError as e:
             self.log.remark("Timeout event after %d seconds, having received \"%s\"" % (self.timeout, r))
             raise e
         r = r.rstrip().decode()
@@ -207,7 +207,7 @@ class usbtmc(object):
         #return self._raw_read()
         try:
             return self._raw_read()
-        except TimeoutError as e:
+        except IOError as e:
             time.sleep(1)
             print("retry")
             return self._raw_read()
