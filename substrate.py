@@ -177,26 +177,19 @@ class usbtmc(object):
         self._dev.flush()
 
     def _raw_read(self):
-        begin = datetime.datetime.now()
-        deadline = datetime.datetime.now() + datetime.timedelta(seconds=self.timeout)
-        r = b""
-        try:
-            c = self._dev.read(1)
-            while c:
-                if datetime.datetime.now() > deadline:
-                    self.log.remark("Timeout event after %d seconds, having received \"%s\"" % (self.timeout, r))
-                    raise IOError("Timeout event after %d seconds, having received \"%s\"" % (self.timeout, r))
-                r += c
-                c = self._dev.read(1)
-                if c == b'\n':
-                    break
-        except IOError as e:
-            self.log.remark("Timeout event after %d seconds, having received \"%s\"" % (self.timeout, r))
-            raise e
-        r = r.rstrip().decode()
+        if self.timeout == 0:
+            r = self._dev.readline().rstrip().decode()
+            self.log.response(r)
+            return r
 
-        self.log.response(r)
-        return r
+        for i in range(self.timeout):
+            r, w, e = select.select([ self._dev ], [], [], 0)
+            if self._dev in r:
+                r = self._dev.readline().rstrip().decode()
+                self.log.response(r)
+                return r
+            self.log.remark("time passes...")
+            time.sleep(1)
 
     def write(self, cmd):
         self._raw_write(cmd)
