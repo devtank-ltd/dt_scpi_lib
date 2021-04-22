@@ -124,13 +124,21 @@ class dummy_substrate(object):
         self.log = log
         if not self.log:
             self.log = fakelog()
+        self.next = None
 
     def write(self, string):
         self.log.command(string)
+        if string == "SYSTem:ERRor?":
+            self.next = "+0:Nothing"
 
     def readline(self):
-        self.log.response("dummy substrate")
-        return "dummy substrate"
+        if not self.next:
+            self.log.response("0")
+            return "0"
+        else:
+            self.log.response(self.next)
+            return self.next
+        self.next = None
 
     def read(self, string):
         self.write(string)

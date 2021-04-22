@@ -2,6 +2,7 @@ from collections import namedtuple
 import sys
 import os
 import time
+from dt_scpi_lib.parameter import *
 
 class ieee488_t(object):
     # IEEE-488.2 - http://rfmw.em.keysight.com/rfcomms/refdocs/gsm/hpib_common.html
@@ -25,19 +26,22 @@ class ieee488_t(object):
         self.opc.getter = "*OPC?"
 
     def cls(self):
-        self.gpib.write("*CLS")
+        self.substrate.write("*CLS")
 
     def esr(self):
-        return self.gpib.read("*ESR?");
+        return self.substrate.read("*ESR?");
 
     def rst(self):
-        self.gpib.write("*RST")
+        self.substrate.write("*RST")
 
     def stbQ(self):
-        return self.gpib.write("*STB?")
+        return self.substrate.write("*STB?")
 
 
 class scpi_t(ieee488_t):
+
+    def __init__(self):
+        super().__init__()
 
     def system_error(self):
         return self.gpib.read("SYSTem:ERRor:NEXT?")

@@ -2,7 +2,6 @@ from collections import namedtuple
 import sys
 import os
 import time
-from dt_scpi_lib.ieee488 import ieee488_t, scpi_t
 
 class parameter_t(object):
     """
@@ -14,7 +13,7 @@ class parameter_t(object):
         self.minimum, self.maximum, self.value = None, None, None
 
     def query(self):
-        return self.parent.read(self.getter)
+        return self.parent.substrate.read(self.getter)
 
     def get(self):
         self.value = self.query()
@@ -26,7 +25,7 @@ class parameter_t(object):
 
     def set(self, value):
         self.boundscheck(value)
-        self.parent.write(self.setter(value))
+        self.parent.substrate.write(self.setter(value))
 
     def __str__(self):
         return self.get()
