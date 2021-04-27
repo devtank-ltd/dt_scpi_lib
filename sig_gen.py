@@ -1,3 +1,4 @@
+from dt_scpi_lib.parameter import *
 from collections import namedtuple
 import sys
 import os
@@ -18,7 +19,7 @@ class sig_gen_t(ieee488_t):
         raise NotImplementedError
 
     @freq.setter
-    def freq(self, freq):
+    def frequency(self, freq):
         raise NotImplementedError
 
     @property
@@ -128,9 +129,11 @@ class fake_sig_gen(sig_gen_t):
         self.mpower_level = level
 
 class scpi_sig_gen(scpi_t):
-    def __init__(self, tty):
-        self.gpib = tty
-        self.mfreq = 0
+    def __init__(self, substrate):
+        super().__init__()
+        #self.frequency = frequency_t(memoizing_parameter_t(substrate, lambda hz: "freq %dHz; " % hz))
+        self.frequency = frequency_t(requerying_parameter_t(substrate, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
+        self.substrate = substrate
         self.mrf_power = False
         self.mpower_level = 0
 
@@ -141,17 +144,8 @@ class scpi_sig_gen(scpi_t):
     @rf_power.setter
     def rf_power(self, enable):
         self.mrf_power = enable
-        self.gpib.write("outp %s;" % ("1" if enable else "0"))
+        self.substrate.write("outp %s;" % ("1" if enable else "0"))
 
-    @property
-    def freq(self):
-        return self.mfreq
-    
-    @freq.setter
-    def freq(self, freq):
-        self.mfreq = freq
-        self.gpib.write("freq %fGHz;" % (freq/float((1000.0*1000.0*1000.0))))
-    
     @property
     def power_level(self):
         return self.mpower_level
@@ -159,16 +153,16 @@ class scpi_sig_gen(scpi_t):
     @power_level.setter
     def power_level(self, level):
         self.mpower_level = level
-        self.gpib.write("pow %f;" % level)
+        self.substrate.write("pow %f;" % level)
 
     def freqQ(self):
-        return int(self.gpib.read("freq?;"))
+        return int(self.substrate.read("freq?;"))
 
 
 class smbv100a(scpi_sig_gen):
     def __init__(self, tty):
         self.gpib = tty
-        self.gpib.write("*RST;")
+        super().__init__()
         self.mfreq = 0
         self.mrf_power = False
 
@@ -212,17 +206,7 @@ class smw200a(scpi_sig_gen):
         self.gpib.timeout = 10
         self.mfreq = 0
         self.mrf_power = False
-
-    @property
-    def freq(self):
-        return self.mfreq
-    
-    @freq.setter
-    def freq(self, hz):
-        while int(self.gpib.read("SOUR1:FREQ?")) != hz:
-            self.gpib.write("SOUR1:FREQ %d HZ;" % hz)
-            time.sleep(1)
-        self.mfreq = hz
+        self.frequency = frequency_t(requerying_parameter_t(substrate, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
 
     def single_pulse(self, period, width):
         # period is specified in nanoseconds,
