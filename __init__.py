@@ -8,4 +8,4 @@ from dt_scpi_lib.power_meter import u2020_t
 from dt_scpi_lib.power_supply import power_supply_t, thurlby_pl330, n6700, n6780a, e36300
 from dt_scpi_lib.fakes import fet_emulator, fake_customer_dut
 from dt_scpi_lib.multimeter import keithley2110
-from dt_scpi_lib.parameter import constant_t, lockable_parameter_t
+from dt_scpi_lib.parameter import constant_t, lockable_parameter_t, frequency_t
