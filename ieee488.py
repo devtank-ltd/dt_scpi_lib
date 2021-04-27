@@ -7,23 +7,11 @@ from dt_scpi_lib.parameter import *
 class ieee488_t(object):
     # IEEE-488.2 - http://rfmw.em.keysight.com/rfcomms/refdocs/gsm/hpib_common.html
     def __init__(self):
-        self.idn = constant_t(self)
-        self.idn.getter = "*IDN?"
-        self.idn.__str__ = lambda: self.idn.get()
-
-        self.opt = constant_t(self)
-        self.opt.getter = "*OPT?"
-        self.opt.__str__ = lambda: self.opt.get()
-
-        self.sre = constant_t(self)
-        self.sre.getter = "*SRE?"
-        self.sre.__str__ = lambda: self.sre.get()
-
-        self.ese = parameter_t(self, lambda _: "*ESE")
-        self.ese.getter = "*ESE?"
-
-        self.opc = parameter_t(self, lambda _: "*OPC")
-        self.opc.getter = "*OPC?"
+        self.idn = constant_t(self, "*IDN?")
+        self.opt = constant_t(self, "*OPT?")
+        self.sre = constant_t(self, "*SRE?")
+        self.ese = parameter_t(self, lambda _: "*ESE", getter="*ESE?")
+        self.opc = parameter_t(self, lambda _: "*OPC", getter="*OPC?")
 
     def cls(self):
         self.substrate.write("*CLS")
