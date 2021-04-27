@@ -137,12 +137,17 @@ class dummy_substrate(object):
             return "0"
         else:
             self.log.response(self.next)
-            return self.next
-        self.next = None
+            o = self.next
+            self.next = None
+            return o
 
     def read(self, string):
         self.write(string)
         return self.readline()
+
+    @property
+    def substrate(self):
+        return self
 
 
 class usbtty(object):
