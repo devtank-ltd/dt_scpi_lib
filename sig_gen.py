@@ -201,6 +201,7 @@ class smbv100a(scpi_sig_gen):
 
 class smw200a(scpi_sig_gen):
     def __init__(self, substrate):
+        super().__init__()
         self.substrate = substrate
         self.substrate.write("*RST;")
         self.substrate.timeout = 10
