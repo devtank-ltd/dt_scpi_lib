@@ -59,7 +59,7 @@ class fake_customer_dut(object):
         if "*idn?" in string.lower():
             self.response = "Customer Faker"
         if "ampl" in string.lower():
-            c = self.coeff[self.sig_gen.mfreq]
+            c = self.coeff[self.sig_gen.frequency.get()]
             pin = self.sig_gen.power_level
             self.response = pow(pin, 2) * c[0] + pin * c[2] + c[2]
 
