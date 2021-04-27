@@ -33,8 +33,10 @@ class u2020_t(scpi_t):
     average_power = "POW:AVER"
     minimum_power = "POW:MIN"
     
-    def __init__(self, substrate):
-        self.substrate = substrate
+    def __init__(self, serial):
+        self.substrate = serial
+        self.frequency = frequency_t(memoizing_parameter_t(serial, lambda hz: "SENS:FREQ %dHz; " % hz))
+        self.averaging = memoizing_parameter_t(serial, lambda boolean: "SENS1:AVER %d" % (1 if boolean else 0))
         super().__init__()
         
         # Do the same as what the pcap dump from Thomas does
@@ -61,14 +63,6 @@ class u2020_t(scpi_t):
         self.substrate.write("UNIT%d:POW DBM" % unit)
     def unit_power_watts(self, unit):
         self.substrate.write("UNIT%d:POW W" % unit)
-
-    @property
-    def frequency(self):
-        return float(self.substrate.read("SENS1:FREQ?"))
-
-    @frequency.setter
-    def frequency(self, freq):
-        self.substrate.write("SENS:FREQ %d" % freq)
 
     def calc_math_expression(self, block, expr):
         return self.substrate.write("CALC%d:MATH \"%s\"" % (block, expr))
@@ -134,6 +128,6 @@ class u2020_t(scpi_t):
         
         self.calibrate()
 
-    def read_channel(self, ch):
+    def read(self, ch):
         return float(self.substrate.read("READ%d?" % ch))
 
