@@ -200,10 +200,10 @@ class smbv100a(scpi_sig_gen):
         self.gpib.write("*RCL %d" % slot)
 
 class smw200a(scpi_sig_gen):
-    def __init__(self, tty):
-        self.gpib = tty
-        self.gpib.write("*RST;")
-        self.gpib.timeout = 10
+    def __init__(self, substrate):
+        self.substrate = substrate
+        self.substrate.write("*RST;")
+        self.substrate.timeout = 10
         self.mfreq = 0
         self.mrf_power = False
         self.frequency = frequency_t(requerying_parameter_t(substrate, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
@@ -217,31 +217,31 @@ class smw200a(scpi_sig_gen):
             else:
                 return "%d ns" % int(ns)
 
-        self.gpib.write(":PULM:MODE SING")
-        self.gpib.write("PULM:PER %s" % durstr(period))
-        self.gpib.write("PULM:WIDT %s" % durstr(width))
-        self.gpib.write("PULM:STAT ON")
+        self.substrate.write(":PULM:MODE SING")
+        self.substrate.write("PULM:PER %s" % durstr(period))
+        self.substrate.write("PULM:WIDT %s" % durstr(width))
+        self.substrate.write("PULM:STAT ON")
 
     def continuous_wave(self):
-        self.gpib.write("PULM:STAT OFF") # turn off PWM.
+        self.substrate.write("PULM:STAT OFF") # turn off PWM.
 
     def screenshot(self, filename):
-        self.gpib.write(":HCOPy:DEVice:LANGuage PNG")
-        self.gpib.write(":HCOPy:FILE:NAME:AUTO:STATe 1")
-        self.gpib.write(":HCOPy:REGion ALL")
-        self.gpib.write(":HCOPy:EXECute")
-        self.gpib.read(":HCOPy:FILE:AUTO:FILE?")
-        self.gpib.write(":HCOPy:DATA?")
-        data = self.gpib.readblock()
+        self.substrate.write(":HCOPy:DEVice:LANGuage PNG")
+        self.substrate.write(":HCOPy:FILE:NAME:AUTO:STATe 1")
+        self.substrate.write(":HCOPy:REGion ALL")
+        self.substrate.write(":HCOPy:EXECute")
+        self.substrate.read(":HCOPy:FILE:AUTO:FILE?")
+        self.substrate.write(":HCOPy:DATA?")
+        data = self.substrate.readblock()
         with open(filename, "w+b") as scrshot:
             scrshot.write(data)
 
     def system_errors_all(self):
-        return self.gpib.read(":SYSTem:ERRor:ALL?")
+        return self.substrate.read(":SYSTem:ERRor:ALL?")
     def save(self, slot):
-        self.gpib.write("*SAV %d" % slot)
+        self.substrate.write("*SAV %d" % slot)
     def recall(self, slot):
-        self.gpib.write("*RCL %d" % slot)
+        self.substrate.write("*RCL %d" % slot)
         
 
 class hp8648(sig_gen_t):
