@@ -7,9 +7,10 @@ class parameter_t(object):
     """
     Use in objects representing test & measurement devices
     """
-    def __init__(self, parent, setter):
+    def __init__(self, parent, setter, getter=None):
         self.parent = parent
         self.setter = setter
+        self.getter = getter
         self.minimum, self.maximum, self.value = None, None, None
 
     def query(self):
@@ -19,7 +20,7 @@ class parameter_t(object):
         self.value = self.query()
         return self.value
 
-    def boundscheck(value):
+    def boundscheck(self, value):
         assert self.minimum is None or value >= self.minimum
         assert self.maximum is None or value <= self.maximum
 
@@ -37,9 +38,9 @@ class parameter_t(object):
 
 class memoizing_parameter_t(parameter_t):
 
-    def __init(self, parent, setter):
+    def __init__(self, parent, setter, getter=None):
+        super().__init__(parent, setter, getter)
         self.ready = False
-        super().__init__(parent, setter)
 
     def get(self):
         if self.ready:
@@ -58,13 +59,14 @@ class requerying_parameter_t(parameter_t):
     # Some instruments don't actually set the thing until you query it. 
     # We may never know why
     def set(self, value):
-        super().set(value)
+        while super().query() != value: # Fix for some instruments that don't always
+            self.super().substrate.write(self.setter(value))
         self.value = self.query()
 
 
 class constant_t(memoizing_parameter_t):
-    def __init__(self, parent):
-        super().__init__(parent, None)
+    def __init__(self, parent, getter):
+        super().__init__(parent, None, getter)
 
     def set(self, value):
         raise Exception("This parameter cannot be set")
@@ -108,10 +110,9 @@ class lockable_parameter_t(parameter_t):
             return self.value
 
     def set(self, value):
+        print("lockable_parameter_t.set(%f)" % value)
         self.ready = False
         self.value = value
-        self.parent.write(self.setter(value))
-        
         for l in self.locklist:
             l.set(value)
 
