@@ -35,8 +35,8 @@ class u2020_t(scpi_t):
     
     def __init__(self, serial):
         self.substrate = serial
-        self.frequency = frequency_t(memoizing_parameter_t(serial, lambda hz: "SENS:FREQ %dHz; " % hz))
-        self.averaging = memoizing_parameter_t(serial, lambda boolean: "SENS1:AVER %d" % (1 if boolean else 0))
+        self.frequency = frequency_t(memoizing_parameter_t(self, lambda hz: "SENS:FREQ %dHz; " % hz))
+        self.averaging = memoizing_parameter_t(self, lambda boolean: "SENS1:AVER %d" % (1 if boolean else 0))
         super().__init__()
         
         # Do the same as what the pcap dump from Thomas does
