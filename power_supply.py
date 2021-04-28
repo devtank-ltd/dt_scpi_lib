@@ -3,6 +3,8 @@ import sys
 import os
 import time
 from dt_scpi_lib.ieee488 import ieee488_t, scpi_t
+from dt_scpi_lib.parameter import *
+
 
 class power_supply_t(object):
     @property
