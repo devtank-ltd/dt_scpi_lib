@@ -137,19 +137,6 @@ class scpi_sig_gen(scpi_t):
         self.mrf_power = enable
         self.substrate.write("outp %s;" % ("1" if enable else "0"))
 
-    @property
-    def power_level(self):
-        return self.mpower_level
-
-    @power_level.setter
-    def power_level(self, level):
-        self.mpower_level = level
-        self.substrate.write("pow %f;" % level)
-
-    def freqQ(self):
-        return int(self.substrate.read("freq?;"))
-
-
 class smbv100a(scpi_sig_gen):
     def __init__(self, tty):
         self.gpib = tty
@@ -197,6 +184,7 @@ class smw200a(scpi_sig_gen):
         self.mfreq = 0
         self.mrf_power = False
         self.frequency = frequency_t(memoizing_parameter_t(self, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
+        self.power_level = memoizing_parameter_t(self, lambda db: "pow %f; " % db, getter="pow?")
 
     def single_pulse(self, period, width):
         # period is specified in nanoseconds,
