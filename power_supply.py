@@ -84,9 +84,9 @@ class n6780a(n6700):
 
 
 class e36300(scpi_t):
-    def __init__(self, chan, gpib):
+    def __init__(self, chan, substrate):
         super().__init__()
-        self.gpib = gpib
+        self.substrate = substrate
         self.chan = chan
         self.mcurrent_limit = 0;
         self.mvoltage = 0;
@@ -98,7 +98,7 @@ class e36300(scpi_t):
     @voltage.setter
     def voltage(self, v):
         self.mvoltage = v
-        self.gpib.write("VOLT %f,(@%u)" % (v, self.chan))
+        self.substrate.write("VOLT %f,(@%u)" % (v, self.chan))
 
     @property
     def current_limit(self):
@@ -107,8 +107,8 @@ class e36300(scpi_t):
     @current_limit.setter
     def current_limit(self, i):
         self.mcurrent_limit = i
-        self.gpib.write("CURRent %f, (@%u)" % (i, self.chan))
+        self.substrate.write("CURRent %f, (@%u)" % (i, self.chan))
 
     @property
     def current(self):
-        return float(self.gpib.read("MEASure:CURRent? CH%u" % self.chan))
+        return float(self.substrate.read("MEASure:CURRent? CH%u" % self.chan))
