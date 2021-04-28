@@ -126,7 +126,7 @@ class scpi_sig_gen(scpi_t):
         self.frequency = frequency_t(requerying_parameter_t(self, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
         self.substrate = substrate
         self.mrf_power = False
-        self.mpower_level = 0
+        self.power_level = memoizing_parameter_t(self, lambda db: "pow %f; " % db, getter="pow?")
 
     @property
     def rf_power(self):
