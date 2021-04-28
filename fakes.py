@@ -48,9 +48,9 @@ class fake_customer_dut(object):
             21000000000: (-0.007065911212970, +0.946994720312365, +23.5683588914354)
             }
 
-    def __init__(self, sig_gen, log=None):
+    def __init__(self, frequency_parameter, log=None):
         self.log = log
-        self.sig_gen = sig_gen
+        self.frequency_parameter = frequency_parameter
         if not self.log:
             self.log = fakelog()
 
@@ -59,7 +59,7 @@ class fake_customer_dut(object):
         if "*idn?" in string.lower():
             self.response = "Customer Faker"
         if "ampl" in string.lower():
-            c = self.coeff[int(self.sig_gen.frequency.get())]
+            c = self.coeff[int(self.frequency_parameter.get())]
             pin = self.sig_gen.power_level
             self.response = pow(pin, 2) * c[0] + pin * c[2] + c[2]
 
