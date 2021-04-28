@@ -110,7 +110,6 @@ class lockable_parameter_t(parameter_t):
             return self.value
 
     def set(self, value):
-        print("lockable_parameter_t.set(%f)" % value)
         self.ready = False
         self.value = value
         for l in self.locklist:
