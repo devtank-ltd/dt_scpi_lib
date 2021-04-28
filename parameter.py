@@ -26,7 +26,7 @@ class parameter_t(object):
 
     def set(self, value):
         self.boundscheck(value)
-        self.parent.write(self.setter(value))
+        self.parent.substrate.write(self.setter(value))
 
     def __str__(self):
         return self.get()
