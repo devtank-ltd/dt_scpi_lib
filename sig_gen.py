@@ -15,14 +15,6 @@ class sig_gen_t(ieee488_t):
         raise NotImplementedError
 
     @property
-    def freq(self):
-        raise NotImplementedError
-
-    @freq.setter
-    def frequency(self, freq):
-        raise NotImplementedError
-
-    @property
     def power_level(self):
         raise NotImplementedError
 
@@ -131,8 +123,7 @@ class fake_sig_gen(sig_gen_t):
 class scpi_sig_gen(scpi_t):
     def __init__(self, substrate):
         super().__init__()
-        #self.frequency = frequency_t(memoizing_parameter_t(substrate, lambda hz: "freq %dHz; " % hz))
-        self.frequency = frequency_t(requerying_parameter_t(substrate, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
+        self.frequency = frequency_t(requerying_parameter_t(self, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
         self.substrate = substrate
         self.mrf_power = False
         self.mpower_level = 0
@@ -205,7 +196,7 @@ class smw200a(scpi_sig_gen):
         self.substrate = substrate
         self.mfreq = 0
         self.mrf_power = False
-        self.frequency = frequency_t(requerying_parameter_t(substrate, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
+        self.frequency = frequency_t(requerying_parameter_t(self, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
 
     def single_pulse(self, period, width):
         # period is specified in nanoseconds,
