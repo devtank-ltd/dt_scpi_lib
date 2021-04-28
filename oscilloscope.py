@@ -3,6 +3,8 @@ import sys
 import os
 import time
 from dt_scpi_lib.ieee488 import ieee488_t, scpi_t
+from dt_scpi_lib.parameter import *
+
 
 class oscilloscope_t(object):
 
@@ -11,14 +13,6 @@ class oscilloscope_t(object):
 
     def stop():
         self.gpib.write(":stop")
-
-    @property
-    def idn(self):
-        return self.gpib.read("*idn?")
-
-    @idn.setter
-    def idn(self, enable):
-        raise NotImplementedError
 
 class tektronix_tds(oscilloscope_t):
 
@@ -35,6 +29,7 @@ class tektronix_tds(oscilloscope_t):
 
     def __init__(self, f):
         self.gpib = f
+        self.idn = constant_t(self, "*IDN?")
 
     def is_channel(self, name):
         return name in [self.channel1, self.channel2, self.channel3, self.channel3, self.ext, self.ext5, self.ext10]
@@ -74,11 +69,7 @@ class rigol_ds1000z_t(oscilloscope_t):
 
     def __init__(self, f):
         self.gpib = f
-    
-    def idn(self):
-        # This command is specified by IEEE-488.2, but the device doesn't support all of IEEE-488.2
-        # so we can't inherit from that class; we just need to reimplement this one command
-        return self.gpib.write("*IDN?")
+        self.idn = constant_t(self, "*IDN?")
 
     def is_channel(self, name):
         return name in [self.d0, self.d1, self.d2, self.d3, self.channel1, self.channel2, self.channel3, self.channel3, self.ac]
@@ -117,6 +108,7 @@ class dsox1204a(oscilloscope_t, ieee488_t):
 
     def __init__(self, f):
         self.gpib = f
+        self.idn = constant_t(self, "*IDN?")
     
     def is_channel(self, name):
         return name in [self.d0, self.d1, self.d2, self.d3, self.channel1, self.channel2, self.channel3, self.channel3, self.ac]
