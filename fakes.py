@@ -61,7 +61,7 @@ class fake_customer_dut(object):
             self.response = "Customer Faker"
         if "ampl" in string.lower():
             c = self.coeff[int(self.frequency_parameter.get())]
-            pin = self.power_level.get()
+            pin = float(self.power_level.get())
             self.response = pow(pin, 2) * c[0] + pin * c[2] + c[2]
 
 
