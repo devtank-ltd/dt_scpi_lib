@@ -17,7 +17,7 @@ class stdout_log(object):
         print(string)
 
     def revelations(self, string):
-        return string.replace("\n", "\\n").replace("\r", "\\r")
+        return str(string).replace("\n", "\\n").replace("\r", "\\r")
 
     def command(self, string):
         self.emit(self.tag + " >>> \"" + self.revelations(string) + "\"")
