@@ -27,8 +27,8 @@ class tektronix_tds(oscilloscope_t):
     rising = "RISe"
     falling = "FALL"
 
-    def __init__(self, f):
-        self.gpib = f
+    def __init__(self, substrate):
+        self.substrate = substrate
         self.idn = constant_t(self, "*IDN?")
 
     def is_channel(self, name):
@@ -67,8 +67,8 @@ class rigol_ds1000z_t(oscilloscope_t):
     falling = "NEG"
     rising_falling = "RFALI"
 
-    def __init__(self, f):
-        self.gpib = f
+    def __init__(self, substrate):
+        self.substrate = substrate
         self.idn = constant_t(self, "*IDN?")
 
     def is_channel(self, name):
@@ -106,8 +106,8 @@ class dsox1204a(oscilloscope_t, ieee488_t):
     falling = "NEG"
     rising_falling = "EITHer"
 
-    def __init__(self, f):
-        self.gpib = f
+    def __init__(self, substrate):
+        self.substrate = substrate
         self.idn = constant_t(self, "*IDN?")
     
     def is_channel(self, name):
