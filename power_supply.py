@@ -85,6 +85,7 @@ class n6780a(n6700):
 
 class e36300(scpi_t):
     def __init__(self, chan, gpib):
+        super().__init__()
         self.gpib = gpib
         self.chan = chan
         self.mcurrent_limit = 0;
