@@ -196,7 +196,7 @@ class smw200a(scpi_sig_gen):
         self.substrate = substrate
         self.mfreq = 0
         self.mrf_power = False
-        self.frequency = frequency_t(requerying_parameter_t(self, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
+        self.frequency = frequency_t(memoizing_parameter_t(self, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
 
     def single_pulse(self, period, width):
         # period is specified in nanoseconds,
