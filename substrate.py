@@ -210,14 +210,12 @@ class usbtmc(object):
         self._raw_write(cmd)
 
     def read(self, cmd):
-        print("cmd", cmd)
         self.write(cmd)
-        #return self._raw_read()
         try:
             return self._raw_read()
         except IOError as e:
             time.sleep(1)
-            print("retry")
+            self.log.remark("retrying")
             return self._raw_read()
 
     def readline(self):
