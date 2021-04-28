@@ -130,6 +130,8 @@ class dummy_substrate(object):
         self.log.command(string)
         if string == "SYSTem:ERRor?":
             self.next = "+0:Nothing"
+        if string == "*IDN?":
+            self.next = "Dummy substrate"
 
     def readline(self):
         if not self.next:
