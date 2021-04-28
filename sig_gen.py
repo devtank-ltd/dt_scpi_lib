@@ -203,7 +203,6 @@ class smw200a(scpi_sig_gen):
     def __init__(self, substrate):
         super().__init__(substrate)
         self.substrate = substrate
-        self.substrate.timeout = 10
         self.mfreq = 0
         self.mrf_power = False
         self.frequency = frequency_t(requerying_parameter_t(substrate, lambda hz: "SOUR1:FREQ %dHz; " % hz, getter="SOUR1:FREQ?"))
