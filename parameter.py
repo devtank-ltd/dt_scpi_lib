@@ -105,12 +105,10 @@ class lockable_parameter_t(parameter_t):
         if self.ready:
             return self.value
         else:
-            self.value = self.parent.substrate.read(self.getter())
-            self.ready = True
-            return self.value
+            return None
 
     def set(self, value):
-        self.ready = False
+        self.ready = True
         self.value = value
         for l in self.locklist:
             l.set(value)
