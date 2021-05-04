@@ -92,7 +92,7 @@ class e36300(scpi_t):
         self.chan = chan
         self.mcurrent_limit = 0;
         self.mvoltage = 0;
-        self.output_enable = memoizing_parameter_t(self, lambda en: "outp %d @%d;" % (1 if en else 0, chan), getter="outp? @%d" % chan)
+        self.output_enable = memoizing_parameter_t(self, lambda en: "outp %d, @%d;" % (1 if en else 0, chan), getter="outp?, @%d" % chan)
 
     @property
     def voltage(self):
