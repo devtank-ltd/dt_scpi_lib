@@ -185,5 +185,11 @@ class dsox1204a(oscilloscope_t, ieee488_t):
         self.substrate.write(":MEASure:VAMPlitude %s" % src)
         return self.measurement_parse(self.substrate.read(":MEASure:VAMPlitude? %s" % src))
 
+    def vrms(self, channel=None):
+        src = ("" if channel is None else channel)
+        self.substrate.write(":MEASure:SOURce %s" % src)
+        self.substrate.write(":MEASure:VRMS %s" % src)
+        return self.measurement_parse(self.substrate.read(":MEASure:VRMS? %s" % src))
+
     def system_error(self):
         return self.substrate.read("SYSTem:ERRor?")
