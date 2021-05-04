@@ -14,6 +14,9 @@ KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc
 # ROHDE & SCHWARZ SMW200A
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0092", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen_smw200a"
 
+# KEYSIGHT MXG N5183B 
+KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="1f01", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen_ns5183b"
+
 # KEYSIGHT N6700C
 KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="0002", GROUP="usbtmc", MODE="0660", SYMLINK+="power_supply_n6700c"
 
