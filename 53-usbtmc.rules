@@ -8,7 +8,6 @@ KERNEL=="usb*", ATTRS{idVendor}=="0957|2a8d", ATTRS{idProduct}=="0396", GROUP="u
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0396", GROUP="usbtmc", MODE="0660", SYMLINK+="oscilloscope_ds1000" # the idProduct here is incorrect
 
 # ROHDE & SCHWARZ SMBV100A
-KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="0023", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen_smbv100a"
 KERNEL=="usb*", ATTRS{idVendor}=="0aad", ATTRS{idProduct}=="005f", GROUP="usbtmc", MODE="0660", SYMLINK+="sig_gen_smbv100a"
 
 # ROHDE & SCHWARZ SMW200A
