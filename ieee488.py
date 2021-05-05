@@ -37,4 +37,5 @@ class scpi_t(ieee488_t):
     def system_version(self):
         return self.gpib.read("SYSTem:VERSion?")
 
-
+    def close(self):
+        self.substrate.close()
