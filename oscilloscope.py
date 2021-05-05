@@ -8,10 +8,10 @@ from dt_scpi_lib.parameter import *
 
 class oscilloscope_t(object):
 
-    def run():
+    def run(self):
         self.substrate.write(":run")
 
-    def stop():
+    def stop(self):
         self.substrate.write(":stop")
 
     def close(self):
