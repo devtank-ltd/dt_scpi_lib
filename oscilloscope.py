@@ -14,6 +14,9 @@ class oscilloscope_t(object):
     def stop():
         self.substrate.write(":stop")
 
+    def close(self):
+        self.substrate.close()
+
 class tektronix_tds(oscilloscope_t):
 
     channel1 = "CH1"
