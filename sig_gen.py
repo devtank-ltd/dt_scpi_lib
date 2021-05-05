@@ -128,6 +128,9 @@ class scpi_sig_gen(scpi_t):
         self.mrf_power = False
         self.power_level = memoizing_parameter_t(self, lambda db: "pow %f; " % db, getter="pow?")
 
+    def close(self):
+        self.substrate.close()
+
     @property
     def rf_power(self):
         return self.mrf_power
@@ -138,9 +141,8 @@ class scpi_sig_gen(scpi_t):
         self.substrate.write("outp %s;" % ("1" if enable else "0"))
 
 class smbv100a(scpi_sig_gen):
-    def __init__(self, tty):
-        self.gpib = tty
-        super().__init__()
+    def __init__(self, substrate):
+        super().__init__(substrate)
         self.mfreq = 0
         self.mrf_power = False
 
@@ -176,6 +178,13 @@ class smbv100a(scpi_sig_gen):
         self.gpib.write("*SAV %d" % slot)
     def recall(self, slot):
         self.gpib.write("*RCL %d" % slot)
+
+class keysight_x_series(scpi_sig_gen):
+    def __init__(self, substrate):
+        super().__init__(substrate)
+        # FIXME: I think the next parameter is for CW only; may need a method to support Pulsed or other modulations
+        self.frequency = frequency_t(memoizing_parameter_t(self, lambda hz: "SOUR:FREQ %dHz; " % hz, getter="SOUR:FREQ?"))
+        self.power_level = memoizing_parameter_t(self, lambda db: "pow %f; " % db, getter="pow?")
 
 class smw200a(scpi_sig_gen):
     def __init__(self, substrate):
@@ -220,7 +229,6 @@ class smw200a(scpi_sig_gen):
         self.substrate.write("*SAV %d" % slot)
     def recall(self, slot):
         self.substrate.write("*RCL %d" % slot)
-        
 
 class hp8648(sig_gen_t):
     def __init__(self, tty):
