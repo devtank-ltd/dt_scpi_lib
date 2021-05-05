@@ -126,6 +126,9 @@ class dummy_substrate(object):
             self.log = fakelog()
         self.next = None
 
+    def close(self):
+        pass
+
     def write(self, string):
         self.log.command(string)
         if string == "SYSTem:ERRor?":
@@ -185,6 +188,9 @@ class usbtmc(object):
         self.timeout = timeout
         if not self.log:
             self.log = fakelog()
+
+    def close(self):
+        self._dev.close()
 
     def _raw_write(self, cmd):
         self.log.command(cmd)
