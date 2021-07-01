@@ -261,11 +261,11 @@ class socket_comm(object):
 
     def write(self, string):
         self.log.command(string)
-        self.sock.sendall(string.encode())
+        self.sock.sendall((string+"\r\n").encode())
 
     def readline(self):
-        string = self.sock.recv(1024)
-        self.log.response(string.decode())
+        string = self.sock.recv(1024).decode().rstrip()
+        self.log.response(string)
         return string
 
     def read(self, string):
@@ -283,4 +283,7 @@ class socket_comm(object):
         while len(dat) < length:
             dat += self.sock.recv(1024)
 
-        return dat
+        return dat.decode()
+
+    def close(self):
+        self.sock.close()
