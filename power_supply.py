@@ -90,17 +90,15 @@ class e36300(scpi_t):
         super().__init__()
         self.substrate = substrate
         self.chan = chan
-        self.mcurrent_limit = 0;
-        self.mvoltage = 0;
+        self._current_limit = 0;
         self.output_enable = memoizing_parameter_t(self, lambda en: "outp %d, (@%d);" % (1 if en else 0, chan), getter="outp?, (@%d)" % chan)
 
     @property
     def voltage(self):
-        return self.mvoltage
+        return float(self.substrate.read("MEASure:VOLTage? CH%u" % self.chan))
 
     @voltage.setter
     def voltage(self, v):
-        self.mvoltage = v
         self.substrate.write("VOLT %f,(@%u)" % (v, self.chan))
 
     @property
@@ -109,7 +107,7 @@ class e36300(scpi_t):
 
     @current_limit.setter
     def current_limit(self, i):
-        self.mcurrent_limit = i
+        self._current_limit = i
         self.substrate.write("CURRent %f, (@%u)" % (i, self.chan))
 
     @property
