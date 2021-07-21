@@ -62,7 +62,7 @@ class n6700(scpi_t):
 
     @property
     def voltage(self):
-        return self.mvoltage
+        return float(self.substrate.read("MEASure:VOLTage? (@%u)" % self.chan))
 
     @voltage.setter
     def voltage(self, volts):
