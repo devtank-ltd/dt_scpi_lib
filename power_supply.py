@@ -54,28 +54,28 @@ class thurlby_pl330(ieee488_t):
 
 class n6700(scpi_t):
     # This unit does not support setting any current limits
-    def __init__(self, chan, gpib):
+    def __init__(self, chan, substrate):
         super().__init__()
-        self.gpib = gpib
+        self.substrate = substrate
         self.chan = chan
         self.mcurrent_limit = 0;
         self.mvoltage = 0;
 
     @property
     def voltage(self):
-        return float(self.gpib.read("MEASure:VOLTage? (@%u)" % self.chan))
+        return float(self.substrate.read("MEASure:VOLTage? (@%u)" % self.chan))
 
     @voltage.setter
     def voltage(self, volts):
         self.mvoltage = volts
-        self.gpib.write("VOLT %f,(@%u)" % (volts, self.chan))
+        self.substrate.write("VOLT %f,(@%u)" % (volts, self.chan))
 
     @property
     def current(self):
-        return float(self.gpib.read("MEASure:CURRent? (@%u)" % self.chan))
+        return float(self.substrate.read("MEASure:CURRent? (@%u)" % self.chan))
 
     def close(self):
-        self.gpib.close()
+        self.substrate.close()
 
 class n6780a(n6700):
     # Very similar to the N6700C we've got, but supports a few more commands
