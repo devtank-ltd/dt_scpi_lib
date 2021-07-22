@@ -55,6 +55,7 @@ class thurlby_pl330(ieee488_t):
 class n6700(scpi_t):
     # This unit does not support setting any current limits
     def __init__(self, chan, gpib):
+        super().__init__()
         self.gpib = gpib
         self.chan = chan
         self.mcurrent_limit = 0;
