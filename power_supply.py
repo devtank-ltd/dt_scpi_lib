@@ -62,7 +62,7 @@ class n6700(scpi_t):
 
     @property
     def voltage(self):
-        return float(self.substrate.read("MEASure:VOLTage? (@%u)" % self.chan))
+        return float(self.gpib.read("MEASure:VOLTage? (@%u)" % self.chan))
 
     @voltage.setter
     def voltage(self, volts):
@@ -72,6 +72,9 @@ class n6700(scpi_t):
     @property
     def current(self):
         return float(self.gpib.read("MEASure:CURRent? (@%u)" % self.chan))
+
+    def close(self):
+        self.gpib.close()
 
 class n6780a(n6700):
     # Very similar to the N6700C we've got, but supports a few more commands
