@@ -77,7 +77,7 @@ class n6700(scpi_t):
 
     @property
     def current_limit(self):
-        return self._current_limit
+        return self.substrate.read("SOURce:CURRent:LEVel:IMMediate:AMPLitude?, (@%u)"% self.chan)
 
     @current_limit.setter
     def current_limit(self, curr):
