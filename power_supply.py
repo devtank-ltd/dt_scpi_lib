@@ -58,8 +58,8 @@ class n6700(scpi_t):
         super().__init__()
         self.substrate = substrate
         self.chan = chan
-        self.mcurrent_limit = 0;
-        self.mvoltage = 0;
+        self._current_limit = 0;
+        self._voltage = 0;
         self.output_enable = memoizing_parameter_t(self, lambda en: "outp %d, (@%d);" % (1 if en else 0, chan), getter="outp?, (@%d)" % chan)
 
     @property
@@ -68,15 +68,22 @@ class n6700(scpi_t):
 
     @voltage.setter
     def voltage(self, volts):
-        self.mvoltage = volts
+        self._voltage = volts
         self.substrate.write("VOLT %f,(@%u)" % (volts, self.chan))
 
     @property
     def current(self):
         return float(self.substrate.read("MEASure:CURRent? (@%u)" % self.chan))
 
-    def close(self):
-        self.substrate.close()
+    @property
+    def current_limit(self):
+        return self._current_limit
+
+    @current_limit.setter
+    def current_limit(self, curr):
+        self._current_limit = curr
+        self.substrate.write("SOURce:CURRent:LEVel:IMMediate:AMPLitude %f, (@%u)"% (curr, self.chan))
+
 
 class n6780a(n6700):
     # Very similar to the N6700C we've got, but supports a few more commands
@@ -108,7 +115,7 @@ class e36300(scpi_t):
 
     @property
     def current_limit(self):
-        return self.mcurrent_limit
+        return self._current_limit
 
     @current_limit.setter
     def current_limit(self, i):
