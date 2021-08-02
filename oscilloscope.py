@@ -194,5 +194,11 @@ class dsox1204a(oscilloscope_t, ieee488_t):
         self.substrate.write(":MEASure:VRMS %s" % src)
         return self.measurement_parse(self.substrate.read(":MEASure:VRMS? %s" % src))
 
+    def average(self, channel=None):
+        src = ("" if channel is None else channel)
+        self.substrate.write(":MEASure:SOURce %s"% src)
+        self.substrate.write(":MEASure:VAVerage DISPlay, %s"% src)
+        return self.measurement_parse(self.substrate.read(":MEASure:VAVerage? DISPlay, %s"% src))
+
     def system_error(self):
         return self.substrate.read("SYSTem:ERRor?")
