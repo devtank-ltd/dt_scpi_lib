@@ -9,12 +9,13 @@ from stat import *
 import fcntl
 import datetime
 
-class stdout_log(object):
+
+class base_log(object):
     def __init__(self, tag):
         self.tag = ((16 - len(tag[:16])) * " ") + tag
 
     def emit(self, string):
-        print(string)
+        raise NotImplementedError
 
     def revelations(self, string):
         return str(string).replace("\n", "\\n").replace("\r", "\\r")
@@ -28,20 +29,25 @@ class stdout_log(object):
     def response(self, string):
         self.emit(self.tag + " <<< \"" + self.revelations(string) + "\"")
 
-class fakelog(object):
+
+class stdout_log(base_log):
+    def emit(self, string):
+        print(string)
+
+
+class fakelog(base_log):
     def __init__(self):
-        pass
+        base_log.__init__(self, tag="fake")
 
     def emit(self, string):
         pass
 
-class stderr_log(stdout_log):
-    def __init__(self, tag):
-        stdout_log.__init__(self, tag)
 
+class stderr_log(stdout_log):
     def emit(self, string):
         print(string, file=sys.stderr)
         sys.stderr.flush()
+
 
 class log(stdout_log):
     def __init__(self, tag, fn):
@@ -61,10 +67,12 @@ class log(stdout_log):
 class teelog(stdout_log):
     def __init__(self, loglist):
         self.loglist = loglist
+        stdout_log.__init__(self, tag="tee")
 
     def emit(selF, string):
         for l in self.loglist:
             l.emit(string)
+
 
 class prologix_tty():
     def __init__(self, f, log=None):
